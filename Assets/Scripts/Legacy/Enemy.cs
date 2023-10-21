@@ -35,7 +35,7 @@ public class Enemy : MonoBehaviour
     void Update()
     {
         transform.position = Vector3.MoveTowards(transform.position, wayPointTarget.position, Time.deltaTime * speed);
-        if (Vector3.Distance(transform.position, wayPointTarget.position) <= 0.2f) GetNextWaipoint();
+        if (Vector3.Distance(transform.position, wayPointTarget.position) <= 0.2f) GetNextWayPoint();
 
         if (player != null )
         {
@@ -76,7 +76,7 @@ public class Enemy : MonoBehaviour
         else Termination();
     }
 
-    void GetNextWaipoint()
+    void GetNextWayPoint()
     {
         if (waypointIndex >= WayPoints.points.Length - 1)
         {

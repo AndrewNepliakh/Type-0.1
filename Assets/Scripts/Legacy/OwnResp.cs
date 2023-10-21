@@ -8,7 +8,6 @@ public class OwnResp : MonoBehaviour {
     public int healthPoint = 50;
     private float currentHealth;
     public Image healthBar;
-    //public Text healthPointText;
     public GameObject explosionFX;
     public GameObject brokenOwnResp;
 
@@ -20,7 +19,6 @@ public class OwnResp : MonoBehaviour {
     void Update()
     {
         healthBar.fillAmount = healthPoint / currentHealth;
-        //healthPointText.text = healthPoint.ToString();
         if ( healthPoint <= 0)
         {
             Termination();
