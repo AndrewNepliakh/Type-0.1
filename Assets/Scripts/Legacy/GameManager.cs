@@ -18,12 +18,12 @@ public class GameManager : MonoBehaviour {
     void Update ()
     {
 
-        if (gameIsOver) return;
-        GameObject player = GameObject.Find("Player");
-        GameObject ownResp = GameObject.Find("OwnResp");
-        GameObject enemyResp = GameObject.Find("EnemyResp");
-        if (player == null || ownResp == null) GameOver();
-        if (enemyResp == null) LevelCompleted();
+        // if (gameIsOver) return;
+        // GameObject player = GameObject.Find("Player");
+        // GameObject ownResp = GameObject.Find("OwnResp");
+        // GameObject enemyResp = GameObject.Find("EnemyResp");
+        // if (player == null || ownResp == null) GameOver();
+        // if (enemyResp == null) LevelCompleted();
 
     }
 
