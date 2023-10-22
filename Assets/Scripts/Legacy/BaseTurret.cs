@@ -7,7 +7,7 @@ public class BaseTurret : MonoBehaviour
     public Color hoverColorDark;
     private Color startColorWhite;
     private Color startColorDark;
-    //private Material[] rend;
+    private Material[] rend;
     public GameObject powerIsRequiredUi;
     public GameObject buildCanvas;
     public GameObject aura;
@@ -18,12 +18,12 @@ public class BaseTurret : MonoBehaviour
     {
         player = GameObject.Find("Player");
 
-        //rend = GetComponent<Renderer>().materials;
+        rend = GetComponent<Renderer>().materials;
 
         buildCanvas.SetActive(false);
 
-        //startColorWhite = rend[0].color;
-        //startColorDark = rend[1].color;
+        startColorWhite = rend[0].color;
+        startColorDark = rend[1].color;
     }
 
     void Update()
@@ -31,21 +31,21 @@ public class BaseTurret : MonoBehaviour
         energyRequireBool = GameObject.FindGameObjectWithTag("300energyRequire");
     }
 
-   /* private void OnMouseEnter()
+    private void OnMouseEnter()
     {
         buildCanvas.SetActive(true);
 
-        //rend[0].color = hoverColorWhite;
-        //rend[1].color = hoverColorDark;
+        rend[0].color = hoverColorWhite;
+        rend[1].color = hoverColorDark;
     }
 
     private void OnMouseExit()
     {
         buildCanvas.SetActive(false);
 
-        //rend[0].color = startColorWhite;
-        //rend[1].color = startColorDark;
-    }*/
+        rend[0].color = startColorWhite;
+        rend[1].color = startColorDark;
+    }
 
     private void OnMouseDown()
     {

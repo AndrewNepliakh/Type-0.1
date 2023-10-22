@@ -620,6 +620,7 @@ GameObject:
   - component: {fileID: 51309258}
   - component: {fileID: 51309257}
   - component: {fileID: 51309256}
+  - component: {fileID: 51309259}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -688,7 +689,7 @@ Transform:
   m_Children:
   - {fileID: 1771327533058555584}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!136 &51309256
 CapsuleCollider:
@@ -734,6 +735,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _animator: {fileID: 1771327533058555588}
   _agent: {fileID: 51309254}
+--- !u!114 &51309259
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 51309251}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a148c5763a0b0947b1b885393aa9325, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  earning: 0
+  earnedValueText: {fileID: 90024669}
 --- !u!1 &54320572
 GameObject:
   m_ObjectHideFlags: 0
@@ -1102,7 +1117,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4801349343170632, guid: 749ba8a7b85f5014685b851207bface5, type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 4801349343170632, guid: 749ba8a7b85f5014685b851207bface5, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1331,7 +1346,6 @@ GameObject:
   - component: {fileID: 193288110}
   - component: {fileID: 193288115}
   - component: {fileID: 193288116}
-  - component: {fileID: 193288117}
   - component: {fileID: 193288119}
   - component: {fileID: 193288120}
   m_Layer: 0
@@ -1453,20 +1467,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _moveForward: {fileID: 959064080}
---- !u!114 &193288117
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 193288109}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8a148c5763a0b0947b1b885393aa9325, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  earning: 0
-  earnedValueText: {fileID: 90024669}
 --- !u!114 &193288119
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11686,7 +11686,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3041587985691323654, guid: 653f57d71d7dbfb488ebb11a628ea6a6, type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3041587985691323654, guid: 653f57d71d7dbfb488ebb11a628ea6a6, type: 3}
       propertyPath: m_LocalPosition.x
