@@ -1,69 +1,60 @@
-﻿using UnityEngine;
+﻿using Infrastructure;
+using Services.Factory;
+using Services.UI;
+using UnityEngine;
+using Zenject;
 
 public class BaseTurret : MonoBehaviour
 {
+	[Inject] private IStorageService _storageService;
+	[Inject] private IGameObjectsFactory _gameObjectsFactory;
 
-    public  Color hoverColorWhite;
-    public Color hoverColorDark;
-    private Color startColorWhite;
-    private Color startColorDark;
-    private Material[] rend;
-    public GameObject powerIsRequiredUi;
-    public GameObject buildCanvas;
-    public GameObject aura;
-    GameObject energyRequireBool;
-    GameObject player;
+	[SerializeField] private PowerIsRequired300 _powerIsRequiredPrefab;
+	[SerializeField] private GameObject _buildCanvas;
+	[SerializeField] private GameObject _aura;
+	[SerializeField] private Color _hoverColorWhite;
+	[SerializeField] private Color _hoverColorDark;
+	private Color _startColorWhite;
+	private Color _startColorDark;
+	private Material[] _rend;
+	private GameObject _energyRequireBool;
 
-    private void Start()
-    {
-        player = GameObject.Find("Player");
+	private void Start()
+	{
+		_rend = GetComponent<Renderer>().materials;
+		_buildCanvas.SetActive(false);
+		_startColorWhite = _rend[0].color;
+		_startColorDark = _rend[1].color;
+	}
+	
+	private void OnMouseEnter()
+	{
+		_buildCanvas.SetActive(true);
 
-        rend = GetComponent<Renderer>().materials;
+		_rend[0].color = _hoverColorWhite;
+		_rend[1].color = _hoverColorDark;
+	}
 
-        buildCanvas.SetActive(false);
+	private void OnMouseExit()
+	{
+		_buildCanvas.SetActive(false);
 
-        startColorWhite = rend[0].color;
-        startColorDark = rend[1].color;
-    }
+		_rend[0].color = _startColorWhite;
+		_rend[1].color = _startColorDark;
+	}
 
-    void Update()
-    {
-        energyRequireBool = GameObject.FindGameObjectWithTag("300energyRequire");
-    }
-
-    private void OnMouseEnter()
-    {
-        buildCanvas.SetActive(true);
-
-        rend[0].color = hoverColorWhite;
-        rend[1].color = hoverColorDark;
-    }
-
-    private void OnMouseExit()
-    {
-        buildCanvas.SetActive(false);
-
-        rend[0].color = startColorWhite;
-        rend[1].color = startColorDark;
-    }
-
-    private void OnMouseDown()
-    {
-
-        if (player != null)
-        {
-            Earning plr = player.GetComponent<Earning>();
-            if (plr.earning < 300 && energyRequireBool == null)
-            {
-                Instantiate(powerIsRequiredUi, transform.position, transform.rotation);
-            }
-            else if (plr.earning >= 300)
-            {
-                GameObject turretToBuild = BuildManager.instanse.GetTurretToBuild();
-                Instantiate(turretToBuild, transform.position, transform.rotation);
-                plr.earning -= 300;
-                Destroy(aura);
-            }
-        }     
-    }
+	private void OnMouseDown()
+	{
+		if (_storageService.Energy < 300 && _energyRequireBool == null)
+		{
+			_energyRequireBool = _gameObjectsFactory.InstantiateSingleGameObject<PowerIsRequired300>(_powerIsRequiredPrefab.gameObject, transform.position, transform.rotation);
+		}
+		else if (_storageService.Energy >= 300)
+		{
+			GameObject turretToBuild = BuildManager.instanse.GetTurretToBuild();
+			Instantiate(turretToBuild, transform.position, transform.rotation);
+			_storageService.Energy -= 300;
+			Destroy(_aura);
+		}
+	}
 }
