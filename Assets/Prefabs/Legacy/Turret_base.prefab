@@ -4837,7 +4837,7 @@ GameObject:
   - component: {fileID: 222065957241015558}
   - component: {fileID: 114910294117251890}
   - component: {fileID: 114880801589176152}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4959,7 +4959,7 @@ GameObject:
   - component: {fileID: 23285027555813750}
   - component: {fileID: 114618601409039340}
   - component: {fileID: 64888428705627888}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Turret_base
   m_TagString: TurretBase
   m_Icon: {fileID: 0}
@@ -5074,7 +5074,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4133701933662180}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: UI_node
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9935,7 +9935,7 @@ GameObject:
   - component: {fileID: 114572456466078416}
   - component: {fileID: 114159259437769136}
   - component: {fileID: 114040312840658690}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Build Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}

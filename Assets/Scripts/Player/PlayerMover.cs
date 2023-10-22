@@ -8,15 +8,13 @@ namespace Player
 	public class PlayerMover : MonoBehaviour
 	{
 		[SerializeField] private NavMeshAgent agent;
-		
-		private LayerMask _moveMask;
-		private bool _isUIHit;
+		private bool _isOtherHit;
 
 		void Update()
 		{
 			if (Input.GetMouseButtonUp(0))
 			{
-				if (!_isUIHit)
+				if (!_isOtherHit)
 				{
 					Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 					RaycastHit hit;
@@ -27,7 +25,7 @@ namespace Player
 					}
 				}
 
-				_isUIHit = false;
+				_isOtherHit = false;
 			}
 		}
 
