@@ -1,51 +1,40 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using Infrastructure;
+using Player;
 using UnityEngine;
-using UnityEngine.UI;
+using Zenject;
 
 public class TakingBattery : MonoBehaviour
 {
-    public float range;
-    float destroyCount = 9.9f;
-    public GameObject ernedRate;
-    public GameObject frustrate;
-    public int earning;
+	[Inject] private IStorageService _storageService;
 
-    void Start()
-    {
-        Destroy(gameObject, 10);
-    }
+	[SerializeField] private GameObject _ernedRatePrefab;
+	[SerializeField] private GameObject _frustratePrefab;
+	[SerializeField] private int _earning;
 
-    private void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.cyan;
-        Gizmos.DrawWireSphere(transform.position, range);
-    }
+	private readonly float _destroyCount = 10f;
+	private PlayerController _player;
 
-    private void Update()
-    {
-        destroyCount -= Time.deltaTime;
-        GameObject player = GameObject.Find("Player");
-        if (player != null)
-        {
-            float playerDist = Vector3.Distance(transform.position, player.transform.position);
+	private void Start()
+	{
+		Destroy(gameObject, _destroyCount);
+	}
 
+	private void OnDestroy()
+	{
+		Dissolve();
+	}
 
-            if (destroyCount <= 0)
-            {
-                Instantiate(frustrate, transform.position, Quaternion.identity);
-                destroyCount = 9.9f;
-            }
+	private void Dissolve()
+	{
+		if (!_player) 
+			Instantiate(_frustratePrefab, transform.position, Quaternion.identity);
+	}
 
-            if (playerDist <= range)
-            {
-                Instantiate(ernedRate, transform.position, Quaternion.identity);
-                player.GetComponent<Earning>().earning += 100;
-                Destroy(gameObject);
-            }
-        }
-
-    }
-
+	private void OnTriggerEnter(Collider other)
+	{
+		if (!other.TryGetComponent(out _player)) return;
+		Instantiate(_ernedRatePrefab, transform.position, Quaternion.identity);
+		_storageService.AddEnergy(_earning);
+		Destroy(gameObject);
+	}
 }
-

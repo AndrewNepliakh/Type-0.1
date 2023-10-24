@@ -53,7 +53,7 @@ public class BaseTurret : MonoBehaviour
 		{
 			GameObject turretToBuild = BuildManager.instanse.GetTurretToBuild();
 			Instantiate(turretToBuild, transform.position, transform.rotation);
-			_storageService.Energy -= 300;
+			_storageService.SubtractEnergy(300);
 			Destroy(_aura);
 		}
 	}

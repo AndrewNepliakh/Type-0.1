@@ -229,7 +229,7 @@ GameObject:
   - component: {fileID: 114921373124181084}
   - component: {fileID: 2828994361567197808}
   m_Layer: 0
-  m_Name: 300 power is required
+  m_Name: 300powerIsRequired
   m_TagString: 300energyRequire
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

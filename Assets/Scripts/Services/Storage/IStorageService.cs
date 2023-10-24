@@ -4,7 +4,9 @@ namespace Infrastructure
 {
 	public interface IStorageService
 	{
-		public int Energy{get; set;}
-		public int Mines{get; set;}
+		public int Energy{get; }
+		public int Mines{get; }
+		void AddEnergy(int value);
+		void SubtractEnergy(int value);
 	}
 }

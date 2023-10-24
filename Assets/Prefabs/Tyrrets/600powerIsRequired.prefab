@@ -58,8 +58,8 @@ GameObject:
   - component: {fileID: 4954531265965254}
   - component: {fileID: 114921373124181084}
   m_Layer: 0
-  m_Name: 1200 power is required 1
-  m_TagString: CanvasRequire
+  m_Name: 600powerIsRequired
+  m_TagString: 600energyRequire
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -71,7 +71,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1784481109646908}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -194.22498, y: 101.302765, z: 0}
+  m_LocalPosition: {x: -553.80566, y: 48.86389, z: -0.7672351}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 224713332766599108}
@@ -148,7 +148,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 0
     m_LineSpacing: 0
-  m_Text: 1200
+  m_Text: 600
 --- !u!114 &114816991762590560
 MonoBehaviour:
   m_ObjectHideFlags: 1

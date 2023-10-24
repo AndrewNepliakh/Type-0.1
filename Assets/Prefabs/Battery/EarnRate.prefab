@@ -58,7 +58,7 @@ GameObject:
   - component: {fileID: 4954531265965254}
   - component: {fileID: 114921373124181084}
   m_Layer: 0
-  m_Name: Earn rate
+  m_Name: EarnRate
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
