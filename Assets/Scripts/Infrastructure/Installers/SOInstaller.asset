@@ -12,3 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c63dddc9a384277418c1bf0468c92139, type: 3}
   m_Name: SOInstaller
   m_EditorClassIdentifier: 
+  _buildData: {fileID: 11400000, guid: fe8db41ad43acb04eabc8cbedc1a0ea7, type: 2}

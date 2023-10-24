@@ -24,6 +24,11 @@ namespace Services.Factory
 			}
 		}
 
+		public GameObject InstantiateObject(GameObject prefab, Vector3 position, Quaternion rotation, Transform parent = null)
+		{
+			return _diContainer.InstantiatePrefab(prefab, position, rotation, parent);
+		}
+
 		public void DestroySingleGameObject<T>(int delay = 0) where T : IFactorizable
 		{
 			if (_gameObjects.TryGetValue(typeof(T), out var value))

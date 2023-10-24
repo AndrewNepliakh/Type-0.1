@@ -1,11 +1,14 @@
-﻿using Infrastructure;
+﻿using Data;
+using Infrastructure;
+using Services;
 using Services.Factory;
 using Services.UI;
 using UnityEngine;
 using Zenject;
 
-public class BaseTurret : MonoBehaviour
+public class TurretPlatform : MonoBehaviour
 {
+	[Inject] private IBuildService _buildService;
 	[Inject] private IStorageService _storageService;
 	[Inject] private IGameObjectsFactory _gameObjectsFactory;
 
@@ -17,7 +20,7 @@ public class BaseTurret : MonoBehaviour
 	private Color _startColorWhite;
 	private Color _startColorDark;
 	private Material[] _rend;
-	private GameObject _energyRequireBool;
+	private GameObject _energyRequireAlert;
 
 	private void Start()
 	{
@@ -26,7 +29,7 @@ public class BaseTurret : MonoBehaviour
 		_startColorWhite = _rend[0].color;
 		_startColorDark = _rend[1].color;
 	}
-	
+
 	private void OnMouseEnter()
 	{
 		_buildCanvas.SetActive(true);
@@ -45,15 +48,19 @@ public class BaseTurret : MonoBehaviour
 
 	private void OnMouseDown()
 	{
-		if (_storageService.Energy < 300 && _energyRequireBool == null)
+		var cost = _buildService.GetBuildItemCost(BuildType.Turret);
+
+		if (_storageService.Energy < cost && _energyRequireAlert == null)
 		{
-			_energyRequireBool = _gameObjectsFactory.InstantiateSingleGameObject<PowerIsRequired300>(_powerIsRequiredPrefab.gameObject, transform.position, transform.rotation);
+			_energyRequireAlert =
+				_gameObjectsFactory.InstantiateSingleGameObject<PowerIsRequired300>(_powerIsRequiredPrefab.gameObject,
+					transform.position, transform.rotation);
 		}
-		else if (_storageService.Energy >= 300)
+		else if (_storageService.Energy >= cost)
 		{
-			GameObject turretToBuild = BuildManager.instanse.GetTurretToBuild();
-			Instantiate(turretToBuild, transform.position, transform.rotation);
-			_storageService.SubtractEnergy(300);
+			var turretToBuild = _buildService.GetItemToBuild(BuildType.Turret);
+			_gameObjectsFactory.InstantiateObject(turretToBuild, transform.position, transform.rotation);
+			_storageService.SubtractEnergy(cost);
 			Destroy(_aura);
 		}
 	}

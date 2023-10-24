@@ -1,89 +1,105 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using Data;
+using Infrastructure;
+using Services;
+using Services.Factory;
+using Services.UI;
 using UnityEngine;
+using UnityEngine.Serialization;
+using Zenject;
 
 public class Upgrade : MonoBehaviour
 {
+	[Inject] private IBuildService _buildService;
+	[Inject] private IStorageService _storageService;
+	[Inject] private IGameObjectsFactory _gameObjectsFactory;
 
-    /*public Color hoverColorWhite;
-    public Color hoverColorDark;
-    private Color startColorWhite;
-    private Color startColorDark;*/
+	[SerializeField] private Color _hoverColorWhite;
+	[SerializeField] private Color _hoverColorDark;
 
-    /*private Material[] matsLafet;
-    private Material[] matsAmmo;
-    private Material[] matsGun;*/
+	[FormerlySerializedAs("matsLafet")] [SerializeField]
+	private Material[] _matsLafet;
 
-    public GameObject lafet;
-    public GameObject ammo;
-    public GameObject gun;
+	[FormerlySerializedAs("matsAmmo")] [SerializeField]
+	private Material[] _matsAmmo;
 
-    public GameObject upgradeCanvas;
-    public GameObject objectToUpgrade;
-    public GameObject powerIsRequiredUi;
-    GameObject energyRequireBool;
-    Earning energyValue;
+	[FormerlySerializedAs("matsGun")] [SerializeField]
+	private Material[] _matsGun;
 
-    private void Start()
-    {
-        GameObject player = GameObject.Find("Player");
-        energyValue = player.GetComponent<Earning>();
+	[FormerlySerializedAs("lafet")] [SerializeField]
+	private GameObject _lafet;
 
-        upgradeCanvas.SetActive(false);
+	[FormerlySerializedAs("ammo")] [SerializeField]
+	private GameObject _ammo;
 
-        /*matsLafet = lafet.GetComponent<Renderer>().materials;
-        matsAmmo = ammo.GetComponent<Renderer>().materials;
-        matsGun = gun.GetComponent<Renderer>().materials;
+	[FormerlySerializedAs("gun")] [SerializeField]
+	private GameObject _gun;
 
-        startColorDark = matsLafet[0].color;
-        startColorWhite = matsLafet[1].color;*/
-    }
+	[FormerlySerializedAs("upgradeCanvas")] [SerializeField]
+	private GameObject _upgradeCanvas;
 
-    private void Update()
-    {
-        energyRequireBool = GameObject.FindGameObjectWithTag("600energyRequire");
-    }
+	[FormerlySerializedAs("objectToUpgrade")] [SerializeField]
+	private GameObject _objectToUpgrade;
 
-    /* private void OnMouseEnter()
-     {
-         upgradeCanvas.SetActive(true);
-         matsLafet[0].color = hoverColorDark;
-         matsAmmo[0].color = hoverColorDark;
-         matsGun[0].color = hoverColorDark;
+	[FormerlySerializedAs("powerIsRequiredUi")] [SerializeField]
+	private GameObject _powerIsRequiredPrefab;
 
-         matsLafet[1].color = hoverColorWhite;
-         matsAmmo[1].color = hoverColorWhite;
-         matsGun[1].color = hoverColorWhite;
-     }
+	private Color _startColorWhite;
+	private Color _startColorDark;
+	private GameObject _energyRequireAlert;
 
-     private void OnMouseExit()
-     {
-         upgradeCanvas.SetActive(false);
-         matsLafet[0].color = startColorDark;
-         matsAmmo[0].color = startColorDark;
-         matsGun[0].color = startColorDark;
 
-         matsLafet[1].color = startColorWhite;
-         matsAmmo[1].color = startColorWhite;
-         matsGun[1].color = startColorWhite;
-     }*/
+	private void Start()
+	{
+		_upgradeCanvas.SetActive(false);
 
-    private void OnMouseDown()
-    {
-        if (energyValue.earning >= 300)
-        {
-            TurretUpgrade();
-            energyValue.earning -= 300;
-        }
-        else if (energyValue.earning < 300 && energyRequireBool == null)
-        {
-            Instantiate(powerIsRequiredUi, transform.position, transform.rotation);
-        }
-    }
+		_matsLafet = _lafet.GetComponent<Renderer>().materials;
+		_matsAmmo = _ammo.GetComponent<Renderer>().materials;
+		_matsGun = _gun.GetComponent<Renderer>().materials;
 
-    void TurretUpgrade()
-    {
-        Destroy(gameObject);
-        Instantiate(objectToUpgrade, transform.position, transform.rotation);
-    }
+		_startColorDark = _matsLafet[0].color;
+		_startColorWhite = _matsLafet[1].color;
+	}
+
+	private void OnMouseEnter()
+	{
+		_upgradeCanvas.SetActive(true);
+		_matsLafet[0].color = _hoverColorDark;
+		_matsAmmo[0].color = _hoverColorDark;
+		_matsGun[0].color = _hoverColorDark;
+
+		_matsLafet[1].color = _hoverColorWhite;
+		_matsAmmo[1].color = _hoverColorWhite;
+		_matsGun[1].color = _hoverColorWhite;
+	}
+
+	private void OnMouseExit()
+	{
+		_upgradeCanvas.SetActive(false);
+		_matsLafet[0].color = _startColorDark;
+		_matsAmmo[0].color = _startColorDark;
+		_matsGun[0].color = _startColorDark;
+
+		_matsLafet[1].color = _startColorWhite;
+		_matsAmmo[1].color = _startColorWhite;
+		_matsGun[1].color = _startColorWhite;
+	}
+
+	private void OnMouseDown()
+	{
+		var cost = _buildService.GetBuildItemCost(BuildType.PlasmaTurret);
+		
+		if (_storageService.Energy < cost && _energyRequireAlert == null)
+		{
+			_energyRequireAlert =
+				_gameObjectsFactory.InstantiateSingleGameObject<PowerIsRequired600>(_powerIsRequiredPrefab.gameObject,
+					transform.position, transform.rotation);
+		}
+		else if (_storageService.Energy >= cost)
+		{
+			var turretToBuild = _buildService.GetItemToBuild(BuildType.PlasmaTurret);
+			Instantiate(turretToBuild, transform.position, transform.rotation);
+			_storageService.SubtractEnergy(cost);
+			Destroy(gameObject);
+		}
+	}
 }

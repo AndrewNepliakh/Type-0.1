@@ -1,12 +1,13 @@
 ﻿using System;
+using Zenject;
 
 namespace Infrastructure
 {
-	public class StorageService : IStorageService
+	public class StorageService : IStorageService, IInitializable
 	{
 		private int _energy;
 		private int _mines;
-		
+
 		public int Energy
 		{
 			get => _energy > 0 ? _energy : 0;
@@ -21,6 +22,11 @@ namespace Infrastructure
 
 		public Action<int> OnEnergyChanged { get; set; }
 		public Action<int> OnMinesChanged { get; set; }
+		
+		public void Initialize()
+		{
+			_energy = Constants.START_ENERGY;
+		}
 
 		public void AddEnergy(int value)
 		{
@@ -45,5 +51,7 @@ namespace Infrastructure
 			_mines -= value;
 			OnMinesChanged?.Invoke(_mines);
 		}
+
+		
 	}
 }

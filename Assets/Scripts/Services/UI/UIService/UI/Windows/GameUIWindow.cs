@@ -16,6 +16,8 @@ public class GameUIWindow : Window
 
 		_storageService.OnEnergyChanged += UpdateEnergyText;
 		_storageService.OnMinesChanged += UpdateMinesText;
+
+		UpdateView();
 	}
 
 	public override void Hide(UIViewArguments arguments)
@@ -32,5 +34,11 @@ public class GameUIWindow : Window
 
 	private void UpdateEnergyText(int value) => _energyText.text = value.ToString();
 	private void UpdateMinesText(int value) => _minesText.text = value.ToString();
-	
+
+	private void UpdateView()
+	{
+		UpdateEnergyText(_storageService.Energy);
+		UpdateMinesText(_storageService.Mines);
+	}
+
 }

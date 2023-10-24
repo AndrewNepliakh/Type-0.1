@@ -2,6 +2,6 @@
 {
 	public interface IFactorizable
 	{
-		
+		void Start();
 	}
 }

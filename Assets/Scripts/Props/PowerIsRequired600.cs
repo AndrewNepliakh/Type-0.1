@@ -4,7 +4,7 @@ using Zenject;
 
 namespace Services.UI
 {
-	public class PowerIsRequired300 : MonoBehaviour, IFactorizable
+	public class PowerIsRequired600 : MonoBehaviour, IFactorizable
 	{
 		[Inject] private IGameObjectsFactory _gameObjectsFactory;
 		public void Start()
