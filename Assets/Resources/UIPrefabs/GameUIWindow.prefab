@@ -578,7 +578,7 @@ GameObject:
   - component: {fileID: 5592833997923783462}
   - component: {fileID: 5592833997923783461}
   m_Layer: 5
-  m_Name: HP_Text (TMP)
+  m_Name: MinesText (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1349,7 +1349,7 @@ GameObject:
   - component: {fileID: 5592833998661245270}
   - component: {fileID: 5592833998661245269}
   m_Layer: 5
-  m_Name: MainUIWindow
+  m_Name: GameUIWindow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1403,6 +1403,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e03a726aca247fd871dec75cdca8129, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _energyText: {fileID: 5592833999628206596}
+  _minesText: {fileID: 5592833997923783461}
 --- !u!1 &5592833998878612007
 GameObject:
   m_ObjectHideFlags: 0

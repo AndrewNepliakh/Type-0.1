@@ -8,5 +8,6 @@ public class BootstrapInstaller : MonoInstaller
     {
         Container.Bind<IStorageService>().To<StorageService>().AsSingle().NonLazy();
         Container.Bind<IGameObjectsFactory>().To<GameObjectsFactory>().AsSingle().NonLazy();
+        Container.Bind(typeof(IUIService),typeof(IInitializable)).To<UIService>().AsSingle().NonLazy();
     }
 }

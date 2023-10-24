@@ -1,4 +1,6 @@
-﻿namespace Infrastructure
+﻿using System;
+
+namespace Infrastructure
 {
 	public class StorageService : IStorageService
 	{
@@ -17,8 +19,31 @@
 			private set => _mines = value > 0 ? value : 0;
 		}
 
-		public void AddEnergy(int value) => _energy += value;
+		public Action<int> OnEnergyChanged { get; set; }
+		public Action<int> OnMinesChanged { get; set; }
 
-		public void SubtractEnergy(int value) => _energy -= value;
+		public void AddEnergy(int value)
+		{
+			_energy += value;
+			OnEnergyChanged?.Invoke(_energy);
+		}
+
+		public void SubtractEnergy(int value)
+		{
+			_energy -= value;
+			OnEnergyChanged?.Invoke(_energy);
+		}
+		
+		public void AddMines(int value)
+		{
+			_mines += value;
+			OnMinesChanged?.Invoke(_mines);
+		}
+
+		public void SubtractMines(int value)
+		{
+			_mines -= value;
+			OnMinesChanged?.Invoke(_mines);
+		}
 	}
 }

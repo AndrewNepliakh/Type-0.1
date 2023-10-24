@@ -1,18 +1,34 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using Object = UnityEngine.Object;
+using UnityEngine.UI;
+using Zenject;
 
-
-	public class UIService : IUIService
+public class UIService : IUIService, IInitializable
 	{
+		[Inject] private DiContainer _diContainer;
+		
 		private Window _currentWindow;
 		private Canvas _mainCanvas;
 
 		private Dictionary<Type, IUIView> _views = new();
 
-		public UIService(Canvas mainCanvas) { _mainCanvas = mainCanvas; }
+		public void Initialize()
+		{
+			var canvasGo = _diContainer.CreateEmptyGameObject("[MainCanvas]");
+			var canvas = canvasGo.AddComponent<Canvas>();
+			var scaler = canvasGo.AddComponent<CanvasScaler>();
+			canvasGo.AddComponent<GraphicRaycaster>();
 
+			canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+			scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+			scaler.screenMatchMode = CanvasScaler.ScreenMatchMode.Expand;
+            
+			scaler.referenceResolution = new Vector2(1920, 1080);
+
+			_mainCanvas = canvas;
+		}
+		
 		public T ShowWindow<T>(UIViewArguments args = null, UIViewArguments closeArgs = null)
 			where T : Window
 		{
@@ -21,7 +37,7 @@ using Object = UnityEngine.Object;
 			if (!_views.ContainsKey(typeof(T)))
 			{
 				var windowPrefab = Resources.Load<GameObject>($"UIPrefabs/{typeof(T)}");
-				var newWindow = Object.Instantiate(windowPrefab, _mainCanvas.transform).GetComponent<T>();
+				var newWindow = _diContainer.InstantiatePrefab(windowPrefab, _mainCanvas.transform).GetComponent<T>();
 
 				HideCurrentWindow(closeArgs);
 
