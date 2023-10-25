@@ -1,10 +1,15 @@
 ﻿using System.Collections.Generic;
+using Player;
+using Services.Factory;
 using UnityEngine;
 using Services.Spawn;
 using UnityEngine.UI;
+using Zenject;
 
 public class Enemy : MonoBehaviour, ISpawnable
 {
+    [Inject] private IGameObjectsFactory _gameObjectsFactory;
+    
     private int damage = 10;
     public float radius = 2f;
     public float detectingTargetRadius = 1f;
@@ -29,6 +34,9 @@ public class Enemy : MonoBehaviour, ISpawnable
         wayPointTarget = _wayPoints[0].position;
         
         currentHealth = healthPoint;
+
+        ownResp = _gameObjectsFactory.GetGameObject<OwnResp>();
+        player = _gameObjectsFactory.GetGameObject<PlayerController>();
     }
 
     void Update()
@@ -36,7 +44,7 @@ public class Enemy : MonoBehaviour, ISpawnable
         transform.position = Vector3.MoveTowards(transform.position, wayPointTarget, Time.deltaTime * speed);
         if (Vector3.Distance(transform.position, wayPointTarget) <= 0.2f) GetNextWayPoint();
 
-        if (player != null )
+        if (player != null)
         {
             if (Vector3.Distance(transform.position, player.transform.position) <= 1.5f && !hasExploded)
             {
@@ -63,7 +71,7 @@ public class Enemy : MonoBehaviour, ISpawnable
             }
         }
 
-        if (ownResp != null)
+        if (_gameObjectsFactory.GetGameObject<EnemyResp>() != null)
         {
             if (Vector3.Distance(transform.position, ownResp.transform.position) <= 1 && !hasExploded)
             {

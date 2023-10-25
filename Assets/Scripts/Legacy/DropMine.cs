@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Player;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class DropMine : MonoBehaviour
@@ -20,8 +21,7 @@ public class DropMine : MonoBehaviour
     {
         Destroy(pointer);
 
-        PlayerControll player = GetComponent<PlayerControll>();
-        player.notUIhit = true;
+        PlayerController player = GetComponent<PlayerController>();
 
         if (mineCount > 0)
         {

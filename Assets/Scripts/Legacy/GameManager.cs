@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Player;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour {
@@ -51,7 +52,7 @@ public class GameManager : MonoBehaviour {
         } 
 
         GameObject player = GameObject.Find("Player");
-        if (player != null) player.GetComponent<PlayerControll>().enabled = false;
+        if (player != null) player.GetComponent<PlayerController>().enabled = false;
 
     }
 
@@ -79,6 +80,6 @@ public class GameManager : MonoBehaviour {
         }
 
         GameObject player = GameObject.Find("Player");
-        if (player != null) player.GetComponent<PlayerControll>().enabled = false;
+        if (player != null) player.GetComponent<PlayerController>().enabled = false;
     }
 }

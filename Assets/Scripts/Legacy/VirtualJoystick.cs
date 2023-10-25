@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Collections;
+using Player;
 
 public class VirtualJoystick : MonoBehaviour, IDragHandler, IPointerUpHandler, IPointerDownHandler
 {
@@ -24,8 +25,6 @@ public class VirtualJoystick : MonoBehaviour, IDragHandler, IPointerUpHandler, I
         {
             if (player != null)
             {
-                player.GetComponent<PlayerControll>().notUIhit = true;
-
                 pos.x = (pos.x / bgImg.rectTransform.sizeDelta.x);
                 pos.y = (pos.y / bgImg.rectTransform.sizeDelta.y);
 

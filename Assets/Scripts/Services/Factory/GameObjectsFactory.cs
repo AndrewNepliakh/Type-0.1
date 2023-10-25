@@ -38,7 +38,7 @@ namespace Services.Factory
 			}
 		}
 		
-		public GameObject GetGameObject<T>(T type) where T : IFactorizable
+		public GameObject GetGameObject<T>() where T : IFactorizable
 		{
 			return _gameObjects.TryGetValue(typeof(T), out var value) ? value : null;
 		}
