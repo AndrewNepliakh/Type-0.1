@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2085362601629506469}
   - component: {fileID: 4257103917123514223}
   - component: {fileID: 8477104413450567412}
+  - component: {fileID: 7972574192496434983}
   m_Layer: 0
   m_Name: EnemyResp
   m_TagString: Untagged
@@ -102,6 +103,18 @@ MonoBehaviour:
   explosionFX: {fileID: 1179837990428478, guid: 6202241bd901b7941a9c979d3e9f08cc, type: 3}
   brokenResp: {fileID: 1282597568281682, guid: 916c22262c34b004b99e304cd5e8f6d5, type: 3}
   healthBar: {fileID: 8930806155973615566}
+--- !u!114 &7972574192496434983
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2311675940255403706}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e179c734586548759b0c80ff120c6bc6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &3613818348076232074
 PrefabInstance:
   m_ObjectHideFlags: 0

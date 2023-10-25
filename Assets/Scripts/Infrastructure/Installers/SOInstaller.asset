@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: SOInstaller
   m_EditorClassIdentifier: 
   _buildData: {fileID: 11400000, guid: fe8db41ad43acb04eabc8cbedc1a0ea7, type: 2}
+  _spawnData: {fileID: 11400000, guid: 76eb0da6f7f03c9489b518c169a4be48, type: 2}

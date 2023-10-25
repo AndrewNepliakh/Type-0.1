@@ -1,8 +1,9 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections.Generic;
+using UnityEngine;
+using Services.Spawn;
 using UnityEngine.UI;
 
-public class Enemy : MonoBehaviour
+public class Enemy : MonoBehaviour, ISpawnable
 {
     private int damage = 10;
     public float radius = 2f;
@@ -16,26 +17,24 @@ public class Enemy : MonoBehaviour
     public GameObject explosionFX;
     public GameObject brokenEnemy;
     public GameObject battery;
-    GameObject player;
-    GameObject ownResp;
+    private GameObject player;
+    private GameObject ownResp;
     public Image healthBar;
-    Transform wayPointTarget;
+    private Vector3 wayPointTarget;
+    private List<WayPoint> _wayPoints;
 
-    void Start()
+    public void Initialize(List<WayPoint> wayPoints)
     {
-        player = GameObject.Find("Player");
-        ownResp = GameObject.Find("OwnResp");
-        GameObject masterControl = GameObject.FindGameObjectWithTag("MasterController");
-        WaveSpawner enmHp = masterControl.GetComponent<WaveSpawner>();
-        healthPoint = enmHp.enemyHp;
+        _wayPoints = wayPoints;
+        wayPointTarget = _wayPoints[0].position;
+        
         currentHealth = healthPoint;
-        wayPointTarget = WayPoints.points[0];
     }
 
     void Update()
     {
-        transform.position = Vector3.MoveTowards(transform.position, wayPointTarget.position, Time.deltaTime * speed);
-        if (Vector3.Distance(transform.position, wayPointTarget.position) <= 0.2f) GetNextWayPoint();
+        transform.position = Vector3.MoveTowards(transform.position, wayPointTarget, Time.deltaTime * speed);
+        if (Vector3.Distance(transform.position, wayPointTarget) <= 0.2f) GetNextWayPoint();
 
         if (player != null )
         {
@@ -78,13 +77,13 @@ public class Enemy : MonoBehaviour
 
     void GetNextWayPoint()
     {
-        if (waypointIndex >= WayPoints.points.Length - 1)
+        if (waypointIndex >= _wayPoints.Count - 1)
         {
             Destroy(gameObject);
             return;
         }
         waypointIndex++;
-        wayPointTarget = WayPoints.points[waypointIndex];
+        wayPointTarget = _wayPoints[waypointIndex].position;
     }
 
     void Explode()
