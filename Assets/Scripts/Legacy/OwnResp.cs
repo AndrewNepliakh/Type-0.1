@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using Services.Factory;
+﻿using Services.Factory;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
@@ -13,7 +11,6 @@ public class OwnResp : MonoBehaviour, IFactorizable
 	private float currentHealth;
 	public Image healthBar;
 	public GameObject explosionFX;
-	public GameObject brokenOwnResp;
 
 	public void Start()
 	{
@@ -36,7 +33,7 @@ public class OwnResp : MonoBehaviour, IFactorizable
 
 	void Termination()
 	{
-		Instantiate(explosionFX, transform.position, transform.rotation);
+		Destroy(Instantiate(explosionFX, transform.position, transform.rotation), 2.0f);
 		_gameObjectsFactory.DestroySingleGameObject<OwnResp>();
 	}
 }
