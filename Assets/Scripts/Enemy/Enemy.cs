@@ -10,23 +10,26 @@ public class Enemy : MonoBehaviour, ISpawnable
 {
     [Inject] private IGameObjectsFactory _gameObjectsFactory;
     
-    private int damage = 10;
     public float radius = 2f;
-    public float detectingTargetRadius = 1f;
     public float force = 700f;
     public float healthPoint;
-    private float currentHealth;
     public float speed = 10f;
-    private int waypointIndex = 0;
-    bool hasExploded = false;
     public GameObject explosionFX;
-    public GameObject brokenEnemy;
     public GameObject battery;
+    public Image healthBar;
+    
+    private int damage = 10;
+    private bool hasExploded;
     private GameObject player;
     private GameObject ownResp;
-    public Image healthBar;
+    private float currentHealth;
+    private int waypointIndex = 0;
     private Vector3 wayPointTarget;
     private List<WayPoint> _wayPoints;
+    
+    private float _distanceToPlayer = 1.5f;
+    private float _distanceToWayPoint = 0.2f;
+    private float _distanceToOwnResp = 1.0f;
 
     public void Initialize(List<WayPoint> wayPoints)
     {
@@ -42,11 +45,11 @@ public class Enemy : MonoBehaviour, ISpawnable
     void Update()
     {
         transform.position = Vector3.MoveTowards(transform.position, wayPointTarget, Time.deltaTime * speed);
-        if (Vector3.Distance(transform.position, wayPointTarget) <= 0.2f) GetNextWayPoint();
+        if (Vector3.Distance(transform.position, wayPointTarget) <= _distanceToWayPoint) GetNextWayPoint();
 
         if (player != null)
         {
-            if (Vector3.Distance(transform.position, player.transform.position) <= 1.5f && !hasExploded)
+            if (Vector3.Distance(transform.position, player.transform.position) <= _distanceToPlayer && !hasExploded)
             {
                 Explode();
                 hasExploded = true;
@@ -73,7 +76,13 @@ public class Enemy : MonoBehaviour, ISpawnable
 
         if (_gameObjectsFactory.GetGameObject<EnemyResp>() != null)
         {
-            if (Vector3.Distance(transform.position, ownResp.transform.position) <= 1 && !hasExploded)
+            if (_gameObjectsFactory.GetGameObject<OwnResp>() == null)
+            {
+                Termination();
+                return;
+            }
+
+            if (Vector3.Distance(transform.position, ownResp.transform.position) <= _distanceToOwnResp && !hasExploded)
             {
                 Damage(ownResp);
                 Explode();
@@ -96,7 +105,7 @@ public class Enemy : MonoBehaviour, ISpawnable
 
     void Explode()
     {
-        Instantiate(explosionFX, transform.position, transform.rotation);
+        Destroy(Instantiate(explosionFX, transform.position, transform.rotation), 2.0f);
         Termination();
     }
 
@@ -118,9 +127,7 @@ public class Enemy : MonoBehaviour, ISpawnable
     {
         if (!hasExploded)
         {
-            Instantiate(battery, transform.position, Quaternion.identity);
-            GameObject brokenEnemyInst = (GameObject)Instantiate(brokenEnemy, transform.position, transform.rotation);
-            Destroy(brokenEnemyInst, 1.5f);
+            _gameObjectsFactory.InstantiateObject(battery, transform.position, Quaternion.identity);
             Destroy(gameObject);
         }
 

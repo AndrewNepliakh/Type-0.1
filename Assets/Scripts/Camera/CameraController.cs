@@ -1,8 +1,12 @@
-﻿using UnityEngine;
+﻿using Player;
+using Services.Factory;
+using UnityEngine;
+using Zenject;
 
 public class CameraController : MonoBehaviour
 {
-    public Transform target;
+    [Inject] private IGameObjectsFactory _gameObjectsFactory;
+    
     public Vector3 offset;
     public float currentZoom = 10f;
     public float pitch = 2f;
@@ -10,8 +14,15 @@ public class CameraController : MonoBehaviour
     public float minZoom = 5f;
     public float maxZoom = 15f;
     public float yawSpeed = 150f;
-    private float currentYaw = 0f;
     public float panBorderThickness = 10f;
+    
+    private float currentYaw = 0f;
+    private Transform target;
+
+    private void Start()
+    {
+        target = _gameObjectsFactory.GetGameObject<PlayerController>().transform;
+    }
 
     // void Update()
     // {

@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using Services.Factory;
 using UnityEngine;
 using UnityEngine.UI;
+using Zenject;
 
 public class OwnResp : MonoBehaviour, IFactorizable
 {
+	[Inject] private IGameObjectsFactory _gameObjectsFactory;
+
 	public int healthPoint = 50;
 	private float currentHealth;
 	public Image healthBar;
@@ -34,7 +37,6 @@ public class OwnResp : MonoBehaviour, IFactorizable
 	void Termination()
 	{
 		Instantiate(explosionFX, transform.position, transform.rotation);
-		Instantiate(brokenOwnResp, transform.position, transform.rotation);
-		Destroy(gameObject);
+		_gameObjectsFactory.DestroySingleGameObject<OwnResp>();
 	}
 }
