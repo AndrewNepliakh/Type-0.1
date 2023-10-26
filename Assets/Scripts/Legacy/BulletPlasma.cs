@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class BulletPlasma : MonoBehaviour {
 
@@ -38,6 +36,7 @@ public class BulletPlasma : MonoBehaviour {
     void HitTarget()
     {
         GameObject hitSparksIns = (GameObject)Instantiate(hitSparks, transform.position, transform.rotation);
+        hitSparksIns.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
         Destroy(hitSparksIns, 1f);
         Destroy(gameObject);
         Damage(target);
