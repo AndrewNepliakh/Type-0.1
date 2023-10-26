@@ -1,36 +1,40 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
+﻿using Player;
+using UnityEngine;
 
-public class PlayerHealth : MonoBehaviour {
-
-    public int healthPoint = 50;
-    public int currentHealth;
-    //public Text healthPointText;
-    public GameObject deadSheep;
-    public Vector3 offset;
-
-	void Start () {
-        currentHealth = healthPoint;
-	}
+public class PlayerHealth : MonoBehaviour, IDamageable
+{
 	
-	void Update () {
+	public int healthPoint = 50;
 
-       // healthPointText.text = currentHealth.ToString();
+	public int currentHealth;
 
-        if (currentHealth <= 0)
-        {
-            Termination();
-        }
-    }
+	//public Text healthPointText;
+	public GameObject deadSheep;
+	public Vector3 offset;
 
-    public void TakingDamage(int damage)
-    {
-        currentHealth -= damage;
-    }
+	void Start()
+	{
+		currentHealth = healthPoint;
+	}
 
-    public void Termination()
-    {
-        Instantiate(deadSheep, transform.position, transform.rotation);
-        Destroy(gameObject);
-    } 
+	void Update()
+	{
+		// healthPointText.text = currentHealth.ToString();
+
+		if (currentHealth <= 0)
+		{
+			Termination();
+		}
+	}
+
+	public void TakingDamage(int damage)
+	{
+		currentHealth -= damage;
+	}
+
+	public void Termination()
+	{
+		Instantiate(deadSheep, transform.position, transform.rotation);
+		Destroy(gameObject);
+	}
 }

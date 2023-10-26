@@ -114,8 +114,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   healthPoint: 50
   healthBar: {fileID: 7985134938612413383}
-  explosionFX: {fileID: 1179837990428478, guid: 6202241bd901b7941a9c979d3e9f08cc, type: 3}
-  brokenOwnResp: {fileID: 1399925260212690, guid: c2fd979b0c7f6374ca5bd8cea3e4059d, type: 3}
+  explosionFX: {fileID: 1121192042590650, guid: e1b08032bec16ba4eb1ae23cbd572664, type: 3}
 --- !u!1001 &2812112789407990147
 PrefabInstance:
   m_ObjectHideFlags: 0

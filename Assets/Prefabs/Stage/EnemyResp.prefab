@@ -100,7 +100,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   force: 700
   healthPoint: 2000
-  explosionFX: {fileID: 1179837990428478, guid: 6202241bd901b7941a9c979d3e9f08cc, type: 3}
+  explosionFX: {fileID: 1121192042590650, guid: e1b08032bec16ba4eb1ae23cbd572664, type: 3}
   brokenResp: {fileID: 1282597568281682, guid: 916c22262c34b004b99e304cd5e8f6d5, type: 3}
   healthBar: {fileID: 8930806155973615566}
 --- !u!114 &7972574192496434983

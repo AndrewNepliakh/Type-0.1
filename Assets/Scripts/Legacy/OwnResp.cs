@@ -1,9 +1,10 @@
-﻿using Services.Factory;
+﻿using Player;
+using Services.Factory;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
 
-public class OwnResp : MonoBehaviour, IFactorizable
+public class OwnResp : MonoBehaviour, IFactorizable, IDamageable
 {
 	[Inject] private IGameObjectsFactory _gameObjectsFactory;
 

@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 5358315065794407332}
   - component: {fileID: 5358315065794407333}
   - component: {fileID: 5358315065794407339}
+  - component: {fileID: 3931322974187278097}
   - component: {fileID: 5358315065794407336}
   - component: {fileID: 5358315065794407337}
   - component: {fileID: 5358315065794407338}
@@ -100,6 +101,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _animator: {fileID: 653549869448155489}
   _agent: {fileID: 5358315065794407335}
+--- !u!114 &3931322974187278097
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5358315065794407330}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2188ff3e83daf1c44b3f96462a065041, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  healthPoint: 50
+  currentHealth: 0
+  deadSheep: {fileID: 1553386617113786, guid: 95a3862f512fc9e4b92b32e80ce980ec, type: 3}
+  offset: {x: 0, y: 0, z: 0}
 --- !u!54 &5358315065794407336
 Rigidbody:
   m_ObjectHideFlags: 0

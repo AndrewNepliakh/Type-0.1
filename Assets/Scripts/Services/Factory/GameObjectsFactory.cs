@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using Player;
 using UnityEngine;
 using Zenject;
 
@@ -10,7 +12,8 @@ namespace Services.Factory
 		[Inject] private DiContainer _diContainer;
 		private Dictionary<Type, GameObject> _gameObjects = new();
 
-		public GameObject InstantiateSingleGameObject<T>(GameObject prefab, Vector3 position, Quaternion rotation, Transform parent = null) where T : IFactorizable
+		public GameObject InstantiateSingleGameObject<T>(GameObject prefab, Vector3 position, Quaternion rotation,
+			Transform parent = null) where T : IFactorizable
 		{
 			if (_gameObjects.TryGetValue(typeof(T), out var value))
 			{
@@ -24,7 +27,8 @@ namespace Services.Factory
 			}
 		}
 
-		public GameObject InstantiateObject(GameObject prefab, Vector3 position, Quaternion rotation, Transform parent = null)
+		public GameObject InstantiateObject(GameObject prefab, Vector3 position, Quaternion rotation,
+			Transform parent = null)
 		{
 			return _diContainer.InstantiatePrefab(prefab, position, rotation, parent);
 		}
@@ -37,10 +41,25 @@ namespace Services.Factory
 				UnityEngine.Object.Destroy(value, delay);
 			}
 		}
-		
+
 		public GameObject GetGameObject<T>() where T : IFactorizable
 		{
 			return _gameObjects.TryGetValue(typeof(T), out var value) ? value : null;
+		}
+
+		public IDamageable[] GetDamageables()
+		{
+			var damageables = new List<IDamageable>();
+			
+			foreach (var go in _gameObjects.Values)
+			{
+				if (go.TryGetComponent<IDamageable>(out var idamageable))
+				{
+					damageables.Add(idamageable);
+				}
+			}
+
+			return damageables.ToArray();
 		}
 	}
 }

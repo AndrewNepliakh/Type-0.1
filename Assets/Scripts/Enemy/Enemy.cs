@@ -8,139 +8,136 @@ using Zenject;
 
 public class Enemy : MonoBehaviour, ISpawnable
 {
-    [Inject] private IGameObjectsFactory _gameObjectsFactory;
-    
-    public float radius = 2f;
-    public float force = 700f;
-    public float healthPoint;
-    public float speed = 10f;
-    public GameObject explosionFX;
-    public GameObject battery;
-    public Image healthBar;
-    
-    private int damage = 10;
-    private bool hasExploded;
-    private GameObject player;
-    private GameObject ownResp;
-    private float currentHealth;
-    private int waypointIndex = 0;
-    private Vector3 wayPointTarget;
-    private List<WayPoint> _wayPoints;
-    
-    private float _distanceToPlayer = 1.5f;
-    private float _distanceToWayPoint = 0.2f;
-    private float _distanceToOwnResp = 1.0f;
+	[Inject] private IGameObjectsFactory _gameObjectsFactory;
 
-    public void Initialize(List<WayPoint> wayPoints)
-    {
-        _wayPoints = wayPoints;
-        wayPointTarget = _wayPoints[0].position;
-        
-        currentHealth = healthPoint;
+	public float radius = 2f;
+	public float force = 700f;
+	public float healthPoint;
+	public float speed = 10f;
+	public GameObject explosionFX;
+	public GameObject battery;
+	public Image healthBar;
 
-        ownResp = _gameObjectsFactory.GetGameObject<OwnResp>();
-        player = _gameObjectsFactory.GetGameObject<PlayerController>();
-    }
+	private int damage = 10;
+	private bool hasExploded;
+	private GameObject player;
+	private GameObject ownResp;
+	private float currentHealth;
+	private int waypointIndex = 0;
+	private Vector3 wayPointTarget;
+	private List<WayPoint> _wayPoints;
 
-    void Update()
-    {
-        transform.position = Vector3.MoveTowards(transform.position, wayPointTarget, Time.deltaTime * speed);
-        if (Vector3.Distance(transform.position, wayPointTarget) <= _distanceToWayPoint) GetNextWayPoint();
+	private float _distanceToPlayer = 1.5f;
+	private float _distanceToWayPoint = 0.2f;
+	private float _distanceToOwnResp = 1.0f;
 
-        if (player != null)
-        {
-            if (Vector3.Distance(transform.position, player.transform.position) <= _distanceToPlayer && !hasExploded)
-            {
-                Explode();
-                hasExploded = true;
+	public void Initialize(List<WayPoint> wayPoints)
+	{
+		_wayPoints = wayPoints;
+		wayPointTarget = _wayPoints[0].position;
 
-                Collider[] collidersToDamage = Physics.OverlapSphere(transform.position, radius);
-                foreach (Collider nearObj in collidersToDamage)
-                {
-                    PlayerHealth dest = nearObj.GetComponent<PlayerHealth>();
-                    if (dest != null)
-                    {
-                        if (dest.currentHealth <= damage) dest.Termination();
-                        else dest.TakingDamage(damage);
-                    }
-                }
+		currentHealth = healthPoint;
 
-                Collider[] collidersToMove = Physics.OverlapSphere(transform.position, radius);
-                foreach (Collider closestObj in collidersToMove)
-                {
-                    Rigidbody rb = closestObj.GetComponent<Rigidbody>();
-                    if (rb != null) rb.AddExplosionForce(force, transform.position, radius);
-                }
-            }
-        }
+		ownResp = _gameObjectsFactory.GetGameObject<OwnResp>();
+		player = _gameObjectsFactory.GetGameObject<PlayerController>();
+	}
 
-        if (_gameObjectsFactory.GetGameObject<EnemyResp>() != null)
-        {
-            if (_gameObjectsFactory.GetGameObject<OwnResp>() == null)
-            {
-                Termination();
-                return;
-            }
+	void Update()
+	{
+		transform.position = Vector3.MoveTowards(transform.position, wayPointTarget, Time.deltaTime * speed);
+		if (Vector3.Distance(transform.position, wayPointTarget) <= _distanceToWayPoint) GetNextWayPoint();
 
-            if (Vector3.Distance(transform.position, ownResp.transform.position) <= _distanceToOwnResp && !hasExploded)
-            {
-                Damage(ownResp);
-                Explode();
-                hasExploded = true;
-            }
-        }
-        else Termination();
-    }
+		if (player != null)
+		{
+			if (Vector3.Distance(transform.position, player.transform.position) <= _distanceToPlayer && !hasExploded)
+			{
+				Explode();
+				hasExploded = true;
 
-    void GetNextWayPoint()
-    {
-        if (waypointIndex >= _wayPoints.Count - 1)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        waypointIndex++;
-        wayPointTarget = _wayPoints[waypointIndex].position;
-    }
+				IDamageable[] damageable = _gameObjectsFactory.GetDamageables();
+				foreach (IDamageable nearObj in damageable)
+				{
+					nearObj.TakingDamage(damage);
+				}
 
-    void Explode()
-    {
-        Destroy(Instantiate(explosionFX, transform.position, transform.rotation), 2.0f);
-        Termination();
-    }
+				Collider[] collidersToMove = Physics.OverlapSphere(transform.position, radius);
+				foreach (Collider closestObj in collidersToMove)
+				{
+					Rigidbody rb = closestObj.GetComponent<Rigidbody>();
+					if (rb != null) rb.AddExplosionForce(force, transform.position, radius);
+				}
+			}
+		}
 
-    void Damage(GameObject obj)
-    {
-        if (obj == ownResp)
-        {
-            OwnResp ownRsp = obj.GetComponent<OwnResp>();
-            ownRsp.TakingDamage(10);
-        }
-        if (obj == player)
-        {
-            PlayerHealth plrHp = obj.GetComponent<PlayerHealth>();
-            plrHp.TakingDamage(10);
-        }
-    }
+		if (_gameObjectsFactory.GetGameObject<EnemyResp>() != null)
+		{
+			if (_gameObjectsFactory.GetGameObject<OwnResp>() == null)
+			{
+				Termination();
+				return;
+			}
 
-    void Termination()
-    {
-        if (!hasExploded)
-        {
-            _gameObjectsFactory.InstantiateObject(battery, transform.position, Quaternion.identity);
-            Destroy(gameObject);
-        }
+			if (Vector3.Distance(transform.position, ownResp.transform.position) <= _distanceToOwnResp && !hasExploded)
+			{
+				Damage(ownResp);
+				Explode();
+				hasExploded = true;
+			}
+		}
+		else Termination();
+	}
 
-        hasExploded = true;
-    }
+	void GetNextWayPoint()
+	{
+		if (waypointIndex >= _wayPoints.Count - 1)
+		{
+			Destroy(gameObject);
+			return;
+		}
 
-    public void TakeDamage(int amount)
-    {
-        healthPoint -= amount;
-        healthBar.fillAmount = healthPoint / currentHealth;
-        if (healthPoint <= 0)
-        {
-            Termination();
-        }
-    }
+		waypointIndex++;
+		wayPointTarget = _wayPoints[waypointIndex].position;
+	}
+
+	void Explode()
+	{
+		Destroy(Instantiate(explosionFX, transform.position, transform.rotation), 2.0f);
+		Termination();
+	}
+
+	void Damage(GameObject obj)
+	{
+		if (obj == ownResp)
+		{
+			OwnResp ownRsp = obj.GetComponent<OwnResp>();
+			ownRsp.TakingDamage(10);
+		}
+
+		if (obj == player)
+		{
+			PlayerHealth plrHp = obj.GetComponent<PlayerHealth>();
+			plrHp.TakingDamage(10);
+		}
+	}
+
+	void Termination()
+	{
+		if (!hasExploded)
+		{
+			_gameObjectsFactory.InstantiateObject(battery, transform.position, Quaternion.identity);
+			Destroy(gameObject);
+		}
+
+		hasExploded = true;
+	}
+
+	public void TakeDamage(int amount)
+	{
+		healthPoint -= amount;
+		healthBar.fillAmount = healthPoint / currentHealth;
+		if (healthPoint <= 0)
+		{
+			Termination();
+		}
+	}
 }

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Player;
+using UnityEngine;
 
 namespace Services.Factory
 {
@@ -8,5 +9,6 @@ namespace Services.Factory
 		public GameObject InstantiateObject(GameObject prefab, Vector3 position, Quaternion rotation, Transform parent = null);
 		public void DestroySingleGameObject<T>(int delay = 0) where T : IFactorizable;
 		public GameObject GetGameObject<T>() where T : IFactorizable;
+		public IDamageable[] GetDamageables();
 	}
 }
