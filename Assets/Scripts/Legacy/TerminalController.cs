@@ -1,9 +1,14 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
+using Infrastructure;
+using Player;
+using Services.Factory;
 using UnityEngine;
+using Zenject;
 
-public class TerminalController : MonoBehaviour
+public class TerminalController : MonoBehaviour, IFactorizable
 {
+    [Inject] private IStorageService _storageService;
+    [Inject] private IGameObjectsFactory _gameObjectsFactory;
 
     bool sheepClose;
 
@@ -20,14 +25,15 @@ public class TerminalController : MonoBehaviour
     GameObject energyRequireBool;
     public Color hoverColorWhite;
     public Color hoverColorDark;
-    public CameraController cam;
+
+    private int _priseToByUltGun = 1200; 
 
 
-    void Start()
+    public void Start()
     {
         children = GetComponentsInChildren<Renderer>();
         _animation = GetComponent<Animator>();
-        player = GameObject.Find("Player");
+        player = _gameObjectsFactory.GetGameObject<PlayerController>();
         sheepClose = false;
         buildCanvas.SetActive(false);
 
@@ -88,16 +94,15 @@ public class TerminalController : MonoBehaviour
     {
         if (sheepClose && buildCanvas != null)
         {
-            if (player.GetComponent<Earning>().earning >= 1200)
+            if (_storageService.Energy >= _priseToByUltGun)
             {
-                player.GetComponent<Earning>().earning -= 1200;
+                _storageService.SubtractEnergy(_priseToByUltGun);
                 rend[0].color = startColorWhite;
                 rend[1].color = startColorDark;
                 Destroy(lamp);
                 Destroy(buildCanvas);
                 _animation.SetBool("sheepClose", false);
                 StartCoroutine("TurnOnUltGun");
-                cam.GetComponent<CameraController>().currentZoom = 15f;
             }
             else
             {
@@ -108,7 +113,7 @@ public class TerminalController : MonoBehaviour
 
     IEnumerator TurnOnUltGun()
     {
-        GameObject ultGun = GameObject.Find("Ultimate_Gun_FBX");
+        GameObject ultGun = _gameObjectsFactory.GetGameObject<UltimateGun>();
         ultGun.GetComponent<Animator>().SetBool("UltGunBought", true);
         yield return new WaitForSeconds(2f);
         ultGun.GetComponent<UltimateGun>().enabled = true;

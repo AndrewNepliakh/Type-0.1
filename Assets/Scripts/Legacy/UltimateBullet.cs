@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class UltimateBullet : MonoBehaviour {
 
@@ -38,6 +36,7 @@ public class UltimateBullet : MonoBehaviour {
     void HitTarget()
     {
         GameObject hitSparksIns = (GameObject)Instantiate(hitSparks, transform.position, transform.rotation);
+        hitSparksIns.transform.localScale = new Vector3(2.0f, 2.0f, 2.0f);
         Destroy(hitSparksIns, 1f);
         Destroy(gameObject);
         Damage(target);
