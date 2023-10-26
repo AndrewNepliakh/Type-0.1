@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 5358315065794407333}
   - component: {fileID: 5358315065794407339}
   - component: {fileID: 3931322974187278097}
+  - component: {fileID: 5203349982236641754}
   - component: {fileID: 5358315065794407336}
   - component: {fileID: 5358315065794407337}
   - component: {fileID: 5358315065794407338}
@@ -32,7 +33,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5358315065794407330}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4, y: 0, z: -6}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -117,6 +118,20 @@ MonoBehaviour:
   currentHealth: 0
   deadSheep: {fileID: 1553386617113786, guid: 95a3862f512fc9e4b92b32e80ce980ec, type: 3}
   offset: {x: 0, y: 0, z: 0}
+--- !u!114 &5203349982236641754
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5358315065794407330}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a6bdcbef0869d040897e573a5579fe1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _noMoreMines: {fileID: 1784481109646908, guid: e44b7c3b9279ce64394c2d6db56918e1, type: 3}
+  _mine: {fileID: 1653410569587988, guid: 68de1b4483d0c604d89bab374615e555, type: 3}
 --- !u!54 &5358315065794407336
 Rigidbody:
   m_ObjectHideFlags: 0

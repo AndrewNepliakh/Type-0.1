@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using Services.Factory;
+﻿using Services.Factory;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -36,8 +34,8 @@ public class EnemyResp : MonoBehaviour, IFactorizable
 
 	void Termination()
 	{
-		Instantiate(explosionFX, transform.position, transform.rotation);
-		Instantiate(brokenResp, transform.position, transform.rotation);
+		Destroy(Instantiate(explosionFX, transform.position, transform.rotation), 2);
+		Destroy(Instantiate(brokenResp, transform.position, transform.rotation), 2);
 		Destroy(gameObject);
 	}
 }

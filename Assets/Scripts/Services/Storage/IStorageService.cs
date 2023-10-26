@@ -11,5 +11,7 @@ namespace Infrastructure
 		Action<int> OnMinesChanged { get; set; }
 		void AddEnergy(int value);
 		void SubtractEnergy(int value);
+		void AddMines(int value);
+		void SubtractMines(int value);
 	}
 }

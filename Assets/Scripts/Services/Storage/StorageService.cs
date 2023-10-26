@@ -26,6 +26,7 @@ namespace Infrastructure
 		public void Initialize()
 		{
 			_energy = Constants.START_ENERGY;
+			_mines = Constants.START_MINES;
 		}
 
 		public void AddEnergy(int value)
