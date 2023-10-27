@@ -110,6 +110,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e7238c0b6728bf4dae7d3b66c1e92c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damageValue: 10
+  damageValue: 7
   speed: 40
   hitSparks: {fileID: 1329845292236604, guid: 9bba9cf244c53c5439505dfc96fdd11c, type: 3}

@@ -6,15 +6,20 @@ namespace Services.Spawn
 	public class Spawner : MonoBehaviour
 	{
 		[Inject] protected ISpawnService _spawnService;
+		private float _spawnRepeating;
+		private int _waveCount = 1;
+		private float _health;
 
 		private void Start()
 		{
-			InvokeRepeating(nameof(Spawn), 2, 2);
+			_spawnRepeating = _spawnService.GetSpawnRepeating(_waveCount);
+			InvokeRepeating(nameof(Spawn), 5, _spawnRepeating);
 		}
 
 		private void Spawn()
 		{
-			_spawnService.Spawn<Enemy>(1);
+			_health += _spawnService.GetIncreaseHealthRate(_waveCount);
+			_spawnService.Spawn<Enemy>(_waveCount).IncreaseHealthRate(_health);
 		}
 	}
 }

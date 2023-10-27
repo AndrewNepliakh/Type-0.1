@@ -16,5 +16,14 @@ namespace Services.Spawn
 			spawnable.Initialize(_spawnData.GetWay(wave));
 			return spawnable;
 		}
+		public float GetSpawnRepeating(int wave)
+		{
+			return _spawnData.GetSpawnRepeating(wave);
+		}
+
+		public float GetIncreaseHealthRate(int wave)
+		{
+			return _spawnData.GetIncreaseHealthRate(wave);
+		}
 	}
 }

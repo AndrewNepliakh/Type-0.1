@@ -114,7 +114,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2188ff3e83daf1c44b3f96462a065041, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  healthPoint: 50
+  healthPoint: 10
   currentHealth: 0
   deadSheep: {fileID: 1553386617113786, guid: 95a3862f512fc9e4b92b32e80ce980ec, type: 3}
   offset: {x: 0, y: 0, z: 0}

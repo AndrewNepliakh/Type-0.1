@@ -35,9 +35,6 @@ public class Enemy : MonoBehaviour, ISpawnable
 	{
 		_wayPoints = wayPoints;
 		wayPointTarget = _wayPoints[0].position;
-
-		currentHealth = healthPoint;
-
 		ownResp = _gameObjectsFactory.GetGameObject<OwnResp>();
 		player = _gameObjectsFactory.GetGameObject<PlayerController>();
 	}
@@ -139,5 +136,11 @@ public class Enemy : MonoBehaviour, ISpawnable
 		{
 			Termination();
 		}
+	}
+
+	public void IncreaseHealthRate(float value)
+	{
+		healthPoint += value;
+		currentHealth = healthPoint;
 	}
 }

@@ -11,6 +11,8 @@ namespace Services.Spawn
 		public int waveCount;
 		public GameObject prefab;
 		public List<WayPoint> wayPoints = new();
+		public float spawnRepeating;
+		public float increaseHealthRate;
 	}
 
 	[Serializable]
@@ -32,5 +34,15 @@ namespace Services.Spawn
 
 		public List<WayPoint> GetWay(int waveCount) =>
 			_waves.Find(wave => wave.waveCount == waveCount).wayPoints.Skip(0).ToList();
+
+		public float GetSpawnRepeating(int waveCount)
+		{
+			return _waves.Find(wave => wave.waveCount == waveCount).spawnRepeating;
+		}
+		
+		public float GetIncreaseHealthRate(int waveCount)
+		{
+			return _waves.Find(wave => wave.waveCount == waveCount).increaseHealthRate;
+		}
 	}
 }
