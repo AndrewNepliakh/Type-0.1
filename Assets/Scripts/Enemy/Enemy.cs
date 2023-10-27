@@ -3,12 +3,14 @@ using Player;
 using Services.Factory;
 using UnityEngine;
 using Services.Spawn;
+using Signals;
 using UnityEngine.UI;
 using Zenject;
 
 public class Enemy : MonoBehaviour, ISpawnable
 {
 	[Inject] private IGameObjectsFactory _gameObjectsFactory;
+	[Inject] private SignalBus _signalBus;
 
 	public float radius = 2f;
 	public float force = 700f;
@@ -33,6 +35,8 @@ public class Enemy : MonoBehaviour, ISpawnable
 
 	public void Initialize(List<WayPoint> wayPoints)
 	{
+		_signalBus.Subscribe<GameEndSignal>(Termination);
+		
 		_wayPoints = wayPoints;
 		wayPointTarget = _wayPoints[0].position;
 		ownResp = _gameObjectsFactory.GetGameObject<OwnResp>();
@@ -68,11 +72,7 @@ public class Enemy : MonoBehaviour, ISpawnable
 
 		if (_gameObjectsFactory.GetGameObject<EnemyResp>() != null)
 		{
-			if (_gameObjectsFactory.GetGameObject<OwnResp>() == null)
-			{
-				Termination();
-				return;
-			}
+			if (_gameObjectsFactory.GetGameObject<OwnResp>() == null) return;
 
 			if (Vector3.Distance(transform.position, ownResp.transform.position) <= _distanceToOwnResp && !hasExploded)
 			{

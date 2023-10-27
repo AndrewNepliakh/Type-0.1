@@ -1,14 +1,14 @@
 ﻿using Player;
+using Signals;
 using UnityEngine;
+using Zenject;
 
 public class PlayerHealth : MonoBehaviour, IDamageable
 {
+	[Inject] private SignalBus _signalBus;
 	
 	public int healthPoint = 50;
-
 	public int currentHealth;
-
-	//public Text healthPointText;
 	public GameObject deadSheep;
 	public Vector3 offset;
 
@@ -19,8 +19,6 @@ public class PlayerHealth : MonoBehaviour, IDamageable
 
 	void Update()
 	{
-		// healthPointText.text = currentHealth.ToString();
-
 		if (currentHealth <= 0)
 		{
 			Termination();
@@ -34,6 +32,7 @@ public class PlayerHealth : MonoBehaviour, IDamageable
 
 	public void Termination()
 	{
+		_signalBus.Fire<GameEndSignal>();
 		Instantiate(deadSheep, transform.position, transform.rotation);
 		Destroy(gameObject);
 	}

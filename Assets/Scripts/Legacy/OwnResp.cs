@@ -1,5 +1,6 @@
 ﻿using Player;
 using Services.Factory;
+using Signals;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
@@ -7,6 +8,7 @@ using Zenject;
 public class OwnResp : MonoBehaviour, IFactorizable, IDamageable
 {
 	[Inject] private IGameObjectsFactory _gameObjectsFactory;
+	[Inject] private SignalBus _signalBus;
 
 	public int healthPoint = 50;
 	private float currentHealth;
@@ -34,6 +36,7 @@ public class OwnResp : MonoBehaviour, IFactorizable, IDamageable
 
 	void Termination()
 	{
+		_signalBus.Fire<GameEndSignal>();
 		Destroy(Instantiate(explosionFX, transform.position, transform.rotation), 2.0f);
 		_gameObjectsFactory.DestroySingleGameObject<OwnResp>();
 	}
