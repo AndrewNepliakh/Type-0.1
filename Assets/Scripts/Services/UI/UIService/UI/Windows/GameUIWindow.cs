@@ -9,6 +9,7 @@ public class GameUIWindow : Window
 	
 	[SerializeField] private TMP_Text _energyText;
 	[SerializeField] private TMP_Text _minesText;
+	[SerializeField] private GameObject _gameEndScreen;
 
 	public override void Show(UIViewArguments arguments)
 	{
@@ -18,6 +19,11 @@ public class GameUIWindow : Window
 		_storageService.OnMinesChanged += UpdateMinesText;
 
 		UpdateView();
+	}
+	
+	public void ShowEndGame()
+	{
+		_gameEndScreen.SetActive(true);
 	}
 
 	public override void Hide(UIViewArguments arguments)
@@ -40,5 +46,4 @@ public class GameUIWindow : Window
 		UpdateEnergyText(_storageService.Energy);
 		UpdateMinesText(_storageService.Mines);
 	}
-
 }

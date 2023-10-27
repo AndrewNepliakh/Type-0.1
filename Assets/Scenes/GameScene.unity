@@ -1937,11 +1937,11 @@ MonoBehaviour:
   _ownResp: {fileID: 2413424195792435132, guid: 653f57d71d7dbfb488ebb11a628ea6a6, type: 3}
   _ownRespPosition: {x: 5.84, y: 0.8, z: -6}
   _player: {fileID: 5358315065794407330, guid: 603bb0bfaa1a59f46986054ef0b4f7fe, type: 3}
-  __playerPosition: {x: 4, y: 0, z: -6}
+  _playerPosition: {x: 4, y: 0, z: -6}
   _terminal: {fileID: 3412549587988672110, guid: 50300c42a3cb6094a89b9c35732cf68e, type: 3}
-  __terminalPosition: {x: 1, y: 1.1201923, z: 4}
+  _terminalPosition: {x: 1, y: 1.119, z: 4}
   _ultimateGun: {fileID: 1607174064298757705, guid: d184a938aa18e7541ad3be0ef542ec0d, type: 3}
-  __ultimateGunPosition: {x: -4, y: 0.8, z: -4}
+  _ultimateGunPosition: {x: -4, y: 0.8, z: -4}
 --- !u!1 &1735142614
 GameObject:
   m_ObjectHideFlags: 0

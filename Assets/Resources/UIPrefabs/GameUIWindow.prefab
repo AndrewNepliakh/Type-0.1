@@ -241,7 +241,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5592833998279207680}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -1009,8 +1009,8 @@ RectTransform:
   m_Children:
   - {fileID: 5592833999329742604}
   - {fileID: 5592833999200154170}
-  - {fileID: 5592833998878612024}
   - {fileID: 5592833997632108480}
+  - {fileID: 5592833998878612024}
   m_Father: {fileID: 5592833998661245268}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1405,6 +1405,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _energyText: {fileID: 5592833999628206596}
   _minesText: {fileID: 5592833997923783461}
+  _gameEndScreen: {fileID: 5592833998279207695}
 --- !u!1 &5592833998878612007
 GameObject:
   m_ObjectHideFlags: 0
@@ -1437,7 +1438,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5592833998279207680}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
