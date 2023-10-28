@@ -85,6 +85,8 @@ public class GameSceneEnterPoint : MonoBehaviour
 			_playerController = _gameObjectsFactory
 				.InstantiateSingleGameObject<PlayerController>(_player, _playerPosition, _player.transform.rotation)
 				.GetComponent<PlayerController>();
+		
+		_signalBus.Fire<GameLateRestartSignal>();
 	}
 
 	private void OnDestroy()

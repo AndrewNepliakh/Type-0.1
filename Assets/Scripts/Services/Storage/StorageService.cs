@@ -28,7 +28,7 @@ namespace Infrastructure
 		
 		public void Initialize()
 		{
-			_signalBus.Subscribe<GameRestartSignal>(GameRestart);
+			_signalBus.Subscribe<GameLateRestartSignal>(GameRestart);
 			
 			_energy = Constants.START_ENERGY;
 			_mines = Constants.START_MINES;

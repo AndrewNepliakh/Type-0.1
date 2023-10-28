@@ -13,6 +13,7 @@ public class BootstrapInstaller : MonoInstaller
         
         Container.DeclareSignal<GameEndSignal>();
         Container.DeclareSignal<GameRestartSignal>();
+        Container.DeclareSignal<GameLateRestartSignal>();
         
         Container.Bind<IBuildService>().To<BuildService>().AsSingle().NonLazy();
         Container.Bind<ISpawnService>().To<SpawnService>().AsSingle().NonLazy();

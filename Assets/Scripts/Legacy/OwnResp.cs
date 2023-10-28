@@ -19,7 +19,7 @@ public class OwnResp : MonoBehaviour, IFactorizable, IDamageable
 
 	public void Start()
 	{
-		_signalBus.Subscribe<GameRestartSignal>(RestartGame);
+		_signalBus.Subscribe<GameLateRestartSignal>(RestartGame);
 		
 		_currentHealth = _healthPoint;
 	}
@@ -47,6 +47,6 @@ public class OwnResp : MonoBehaviour, IFactorizable, IDamageable
 
 	private void OnDestroy()
 	{
-		_signalBus.Unsubscribe<GameRestartSignal>(RestartGame);
+		_signalBus.Unsubscribe<GameLateRestartSignal>(RestartGame);
 	}
 }

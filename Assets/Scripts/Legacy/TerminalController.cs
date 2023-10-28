@@ -1,12 +1,15 @@
 ﻿using System.Collections;
+using System.Threading.Tasks;
 using Infrastructure;
 using Player;
 using Services.Factory;
+using Signals;
 using UnityEngine;
 using Zenject;
 
 public class TerminalController : MonoBehaviour, IFactorizable
 {
+    [Inject] private SignalBus _signalBus;
     [Inject] private IStorageService _storageService;
     [Inject] private IGameObjectsFactory _gameObjectsFactory;
 
@@ -20,7 +23,6 @@ public class TerminalController : MonoBehaviour, IFactorizable
     Color startColorDark;
 
     public GameObject buildCanvas;
-    public GameObject lamp;
     public GameObject energyRequire;
     GameObject energyRequireBool;
     public Color hoverColorWhite;
@@ -31,6 +33,8 @@ public class TerminalController : MonoBehaviour, IFactorizable
 
     public void Start()
     {
+        _signalBus.Subscribe<GameLateRestartSignal>(GameRestart);
+        
         children = GetComponentsInChildren<Renderer>();
         _animation = GetComponent<Animator>();
         player = _gameObjectsFactory.GetSingleGameObject<PlayerController>();
@@ -42,7 +46,12 @@ public class TerminalController : MonoBehaviour, IFactorizable
         startColorWhite = rend[0].color;
     }
 
-    void Update()
+    private async void GameRestart()
+    {
+        player = _gameObjectsFactory.GetSingleGameObject<PlayerController>();
+    }
+
+    private void Update()
     {
         energyRequireBool = GameObject.FindGameObjectWithTag("CanvasRequire");
 
@@ -60,7 +69,6 @@ public class TerminalController : MonoBehaviour, IFactorizable
             }
         }
         else _animation.SetBool("sheepClose", false);
-
     }
 
     private void OnMouseOver()
@@ -90,7 +98,7 @@ public class TerminalController : MonoBehaviour, IFactorizable
         }
     }
 
-    void OnMouseDown()
+    private void OnMouseDown()
     {
         if (sheepClose && buildCanvas != null)
         {
@@ -99,10 +107,9 @@ public class TerminalController : MonoBehaviour, IFactorizable
                 _storageService.SubtractEnergy(_priseToByUltGun);
                 rend[0].color = startColorWhite;
                 rend[1].color = startColorDark;
-                Destroy(lamp);
                 Destroy(buildCanvas);
                 _animation.SetBool("sheepClose", false);
-                StartCoroutine("TurnOnUltGun");
+                StartCoroutine(TurnOnUltimateGun());
             }
             else
             {
@@ -111,7 +118,7 @@ public class TerminalController : MonoBehaviour, IFactorizable
         }
     }
 
-    IEnumerator TurnOnUltGun()
+    private IEnumerator TurnOnUltimateGun()
     {
         GameObject ultGun = _gameObjectsFactory.GetSingleGameObject<UltimateGun>();
         ultGun.GetComponent<Animator>().SetBool("UltGunBought", true);

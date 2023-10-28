@@ -57,7 +57,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildCanvas: {fileID: 3412549588363614657}
-  lamp: {fileID: 0}
   energyRequire: {fileID: 1784481109646908, guid: 6631687610310064f97af4388371bd13, type: 3}
   hoverColorWhite: {r: 0.14117648, g: 1, b: 0.6431373, a: 1}
   hoverColorDark: {r: 0.14117648, g: 0.627451, b: 0.6431373, a: 1}
@@ -179,7 +178,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 0
+  m_PresetInfoIsWorld: 1
 --- !u!114 &3412549588363614670
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -17,7 +17,7 @@ namespace Services.Spawn
 		private void Start()
 		{
 			_signalBus.Subscribe<GameEndSignal>(OnGameEnd);
-			_signalBus.Subscribe<GameRestartSignal>(OnGameRestart);
+			_signalBus.Subscribe<GameLateRestartSignal>(OnGameRestart);
 			
 			InitiateSpawner();
 		}
@@ -41,7 +41,7 @@ namespace Services.Spawn
 		private void OnDestroy()
 		{
 			_signalBus.Unsubscribe<GameEndSignal>(OnGameEnd);
-			_signalBus.Unsubscribe<GameRestartSignal>(OnGameRestart);
+			_signalBus.Unsubscribe<GameLateRestartSignal>(OnGameRestart);
 		}
 	}
 }
