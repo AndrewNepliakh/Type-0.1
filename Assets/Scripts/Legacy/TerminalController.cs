@@ -1,71 +1,68 @@
 ﻿using System.Collections;
-using System.Threading.Tasks;
-using Infrastructure;
-using Player;
 using Services.Factory;
-using Signals;
+using Infrastructure;
 using UnityEngine;
+using Signals;
 using Zenject;
+using Player;
 
 public class TerminalController : MonoBehaviour, IFactorizable
 {
-    [Inject] private SignalBus _signalBus;
-    [Inject] private IStorageService _storageService;
     [Inject] private IGameObjectsFactory _gameObjectsFactory;
-
-    bool sheepClose;
-
-    GameObject player;
-    Animator _animation;
-    Renderer[] children;
-    Material[] rend;
-    Color startColorWhite;
-    Color startColorDark;
-
-    public GameObject buildCanvas;
+    [Inject] private IStorageService _storageService;
+    [Inject] private SignalBus _signalBus;
+    
     public GameObject energyRequire;
-    GameObject energyRequireBool;
+    public GameObject buildCanvas;
     public Color hoverColorWhite;
     public Color hoverColorDark;
 
+    private GameObject _energyRequireBool;
     private int _priseToByUltGun = 1200; 
+    private Color _startColorWhite;
+    private Color _startColorDark;
+    private Renderer[] _children;
+    private Animator _animation;
+    private GameObject _player;
+    private bool _sheepClose;
+    private Material[] _rend;
 
 
     public void Start()
     {
         _signalBus.Subscribe<GameLateRestartSignal>(GameRestart);
         
-        children = GetComponentsInChildren<Renderer>();
+        _children = GetComponentsInChildren<Renderer>();
         _animation = GetComponent<Animator>();
-        player = _gameObjectsFactory.GetSingleGameObject<PlayerController>();
-        sheepClose = false;
+        _player = _gameObjectsFactory.GetSingleGameObject<PlayerController>();
+        _sheepClose = false;
         buildCanvas.SetActive(false);
 
-        rend = GetComponentInChildren<Renderer>().materials;
-        startColorDark = rend[1].color;
-        startColorWhite = rend[0].color;
+        _rend = GetComponentInChildren<Renderer>().materials;
+        _startColorDark = _rend[1].color;
+        _startColorWhite = _rend[0].color;
     }
 
     private async void GameRestart()
     {
-        player = _gameObjectsFactory.GetSingleGameObject<PlayerController>();
+        _player = _gameObjectsFactory.GetSingleGameObject<PlayerController>();
     }
 
     private void Update()
     {
-        energyRequireBool = GameObject.FindGameObjectWithTag("CanvasRequire");
+        _energyRequireBool = GameObject.FindGameObjectWithTag("CanvasRequire");
 
-        if (player != null && buildCanvas != null)
+        if (_player != null && buildCanvas != null)
         {
-            if (Vector3.Distance(transform.position, player.transform.position) <= 2)
+            if (Vector3.Distance(transform.position, _player.transform.position) <= 2)
             {
                 _animation.SetBool("sheepClose", true);
-                sheepClose = true;
+                _sheepClose = true;
             }
             else
             {
                 _animation.SetBool("sheepClose", false);
-                sheepClose = false;
+                _sheepClose = false;
             }
         }
         else _animation.SetBool("sheepClose", false);
@@ -73,15 +70,15 @@ public class TerminalController : MonoBehaviour, IFactorizable
 
     private void OnMouseOver()
     {
-        if (sheepClose && buildCanvas != null)
+        if (_sheepClose && buildCanvas != null)
         {
             buildCanvas.SetActive(true);
-            foreach (Renderer rnd in children)
+            foreach (Renderer rnd in _children)
             {
-                rend = rnd.GetComponent<Renderer>().materials;
+                _rend = rnd.GetComponent<Renderer>().materials;
 
-                rend[0].color = hoverColorWhite;
-                rend[1].color = hoverColorDark;
+                _rend[0].color = hoverColorWhite;
+                _rend[1].color = hoverColorDark;
             }
         }
     }
@@ -89,31 +86,31 @@ public class TerminalController : MonoBehaviour, IFactorizable
     private void OnMouseExit()
     {
         if (buildCanvas != null) buildCanvas.SetActive(false);
-        foreach (Renderer rnd in children)
+        foreach (Renderer rnd in _children)
         {
-            rend = rnd.GetComponent<Renderer>().materials;
+            _rend = rnd.GetComponent<Renderer>().materials;
 
-            rend[0].color = startColorWhite;
-            rend[1].color = startColorDark;
+            _rend[0].color = _startColorWhite;
+            _rend[1].color = _startColorDark;
         }
     }
 
     private void OnMouseDown()
     {
-        if (sheepClose && buildCanvas != null)
+        if (_sheepClose && buildCanvas != null)
         {
             if (_storageService.Energy >= _priseToByUltGun)
             {
                 _storageService.SubtractEnergy(_priseToByUltGun);
-                rend[0].color = startColorWhite;
-                rend[1].color = startColorDark;
+                _rend[0].color = _startColorWhite;
+                _rend[1].color = _startColorDark;
                 Destroy(buildCanvas);
                 _animation.SetBool("sheepClose", false);
                 StartCoroutine(TurnOnUltimateGun());
             }
             else
             {
-                if (energyRequireBool == null) Instantiate(energyRequire, transform.position, transform.rotation);
+                if (_energyRequireBool == null) Instantiate(energyRequire, transform.position, transform.rotation);
             }
         }
     }

@@ -86,6 +86,10 @@ public class GameSceneEnterPoint : MonoBehaviour
 				.InstantiateSingleGameObject<PlayerController>(_player, _playerPosition, _player.transform.rotation)
 				.GetComponent<PlayerController>();
 		
+		_gameObjectsFactory.DestroySingleGameObject<UltimateGun>();
+		_gameObjectsFactory.InstantiateSingleGameObject<UltimateGun>(_ultimateGun, _ultimateGunPosition,
+			_ultimateGun.transform.rotation);
+		
 		_signalBus.Fire<GameLateRestartSignal>();
 	}
 
