@@ -18,12 +18,17 @@ public class GameUIWindow : Window
 		_storageService.OnEnergyChanged += UpdateEnergyText;
 		_storageService.OnMinesChanged += UpdateMinesText;
 
-		UpdateView();
+		Reset();
 	}
 	
 	public void ShowEndGame()
 	{
 		_gameEndScreen.SetActive(true);
+	}
+	
+	public void CloseEndGame()
+	{
+		_gameEndScreen.SetActive(false);
 	}
 
 	public override void Hide(UIViewArguments arguments)
@@ -36,6 +41,8 @@ public class GameUIWindow : Window
 
 	public override void Reset()
 	{
+		CloseEndGame();
+		UpdateView();
 	}
 
 	private void UpdateEnergyText(int value) => _energyText.text = value.ToString();

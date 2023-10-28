@@ -59,7 +59,7 @@ public class TurretPlatform : MonoBehaviour
 		else if (_storageService.Energy >= cost)
 		{
 			var turretToBuild = _buildService.GetItemToBuild(BuildType.Turret);
-			_gameObjectsFactory.InstantiateObject(turretToBuild, transform.position, transform.rotation);
+			_gameObjectsFactory.InstantiateNonSingleGameObject(turretToBuild, transform.position, transform.rotation);
 			_storageService.SubtractEnergy(cost);
 			Destroy(_aura);
 		}

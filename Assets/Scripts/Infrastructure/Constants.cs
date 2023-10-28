@@ -1,8 +1,9 @@
 ﻿namespace Infrastructure
 {
-	public class Constants
+	public static class Constants
 	{
-		public const int START_ENERGY = 0;
+		public const int START_HP_OWNRESP = 50;
+		public const int START_ENERGY = 9999;
 		public const int START_MINES = 4;
 		
 		public const string GAME_SCENE = "GameScene";

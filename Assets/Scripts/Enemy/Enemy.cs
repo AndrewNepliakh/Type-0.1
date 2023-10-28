@@ -9,8 +9,8 @@ using Zenject;
 
 public class Enemy : MonoBehaviour, ISpawnable
 {
-	[Inject] private IGameObjectsFactory _gameObjectsFactory;
 	[Inject] private SignalBus _signalBus;
+	[Inject] private IGameObjectsFactory _gameObjectsFactory;
 
 	public float radius = 2f;
 	public float force = 700f;
@@ -22,8 +22,8 @@ public class Enemy : MonoBehaviour, ISpawnable
 
 	private int damage = 10;
 	private bool hasExploded;
-	private GameObject player;
-	private GameObject ownResp;
+	private PlayerHealth player;
+	private OwnResp ownResp;
 	private float currentHealth;
 	private int waypointIndex = 0;
 	private Vector3 wayPointTarget;
@@ -39,8 +39,8 @@ public class Enemy : MonoBehaviour, ISpawnable
 		
 		_wayPoints = wayPoints;
 		wayPointTarget = _wayPoints[0].position;
-		ownResp = _gameObjectsFactory.GetGameObject<OwnResp>();
-		player = _gameObjectsFactory.GetGameObject<PlayerController>();
+		ownResp = _gameObjectsFactory.GetSingleGameObject<OwnResp>().GetComponent<OwnResp>();
+		player = _gameObjectsFactory.GetSingleGameObject<PlayerController>().GetComponent<PlayerHealth>();
 	}
 
 	void Update()
@@ -52,82 +52,25 @@ public class Enemy : MonoBehaviour, ISpawnable
 		{
 			if (Vector3.Distance(transform.position, player.transform.position) <= _distanceToPlayer && !hasExploded)
 			{
+				player.TakingDamage(damage);
 				Explode();
 				hasExploded = true;
-
-				IDamageable[] damageable = _gameObjectsFactory.GetDamageables();
-				foreach (IDamageable nearObj in damageable)
-				{
-					nearObj.TakingDamage(damage);
-				}
-
-				Collider[] collidersToMove = Physics.OverlapSphere(transform.position, radius);
-				foreach (Collider closestObj in collidersToMove)
-				{
-					Rigidbody rb = closestObj.GetComponent<Rigidbody>();
-					if (rb != null) rb.AddExplosionForce(force, transform.position, radius);
-				}
 			}
 		}
+		else Termination();
 
-		if (_gameObjectsFactory.GetGameObject<EnemyResp>() != null)
+		if (ownResp != null)
 		{
-			if (_gameObjectsFactory.GetGameObject<OwnResp>() == null) return;
-
 			if (Vector3.Distance(transform.position, ownResp.transform.position) <= _distanceToOwnResp && !hasExploded)
 			{
-				Damage(ownResp);
+				ownResp.TakingDamage(damage);
 				Explode();
 				hasExploded = true;
 			}
 		}
 		else Termination();
 	}
-
-	void GetNextWayPoint()
-	{
-		if (waypointIndex >= _wayPoints.Count - 1)
-		{
-			Destroy(gameObject);
-			return;
-		}
-
-		waypointIndex++;
-		wayPointTarget = _wayPoints[waypointIndex].position;
-	}
-
-	void Explode()
-	{
-		Destroy(Instantiate(explosionFX, transform.position, transform.rotation), 2.0f);
-		Termination();
-	}
-
-	void Damage(GameObject obj)
-	{
-		if (obj == ownResp)
-		{
-			OwnResp ownRsp = obj.GetComponent<OwnResp>();
-			ownRsp.TakingDamage(10);
-		}
-
-		if (obj == player)
-		{
-			PlayerHealth plrHp = obj.GetComponent<PlayerHealth>();
-			plrHp.TakingDamage(10);
-		}
-	}
-
-	void Termination()
-	{
-		if (!hasExploded)
-		{
-			_gameObjectsFactory.InstantiateObject(battery, transform.position, Quaternion.identity);
-			Destroy(gameObject);
-		}
-
-		hasExploded = true;
-	}
-
+	
 	public void TakeDamage(int amount)
 	{
 		healthPoint -= amount;
@@ -142,5 +85,41 @@ public class Enemy : MonoBehaviour, ISpawnable
 	{
 		healthPoint += value;
 		currentHealth = healthPoint;
+	}
+
+	private void GetNextWayPoint()
+	{
+		if (waypointIndex >= _wayPoints.Count - 1)
+		{
+			Destroy(gameObject);
+			return;
+		}
+
+		waypointIndex++;
+		wayPointTarget = _wayPoints[waypointIndex].position;
+	}
+
+	private void Explode()
+	{
+		Collider[] collidersToMove = Physics.OverlapSphere(transform.position, radius);
+		foreach (Collider closestObj in collidersToMove)
+		{
+			Rigidbody rb = closestObj.GetComponent<Rigidbody>();
+			if (rb != null) rb.AddExplosionForce(force, transform.position, radius);
+		}
+		
+		_gameObjectsFactory.DestroyNonSingleGameObject(_gameObjectsFactory.InstantiateNonSingleGameObject(explosionFX, transform.position, transform.rotation), 2.0f);
+		Termination();
+	}
+
+	private void Termination()
+	{
+		if (!hasExploded)
+		{
+			_gameObjectsFactory.InstantiateNonSingleGameObject(battery, transform.position, Quaternion.identity);
+			_gameObjectsFactory.DestroyNonSingleGameObject(gameObject);
+		}
+
+		hasExploded = true;
 	}
 }

@@ -112,9 +112,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3ea44523b3b5cc4898608d4f3397fb4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  healthPoint: 50
-  healthBar: {fileID: 7985134938612413383}
-  explosionFX: {fileID: 1121192042590650, guid: e1b08032bec16ba4eb1ae23cbd572664, type: 3}
+  _healthBar: {fileID: 7985134938612413383}
+  _explosionFX: {fileID: 1121192042590650, guid: e1b08032bec16ba4eb1ae23cbd572664, type: 3}
 --- !u!1001 &2812112789407990147
 PrefabInstance:
   m_ObjectHideFlags: 0

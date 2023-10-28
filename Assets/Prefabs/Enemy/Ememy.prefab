@@ -392,11 +392,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   radius: 5
-  force: 50
+  force: 500
   healthPoint: 10
   speed: 2
   explosionFX: {fileID: 1329845292236604, guid: 9bba9cf244c53c5439505dfc96fdd11c, type: 3}
-  brokenEnemy: {fileID: 1809302014567254, guid: 8027c7bf701a1bb46b0376f3ff3590f3, type: 3}
   battery: {fileID: 1259250577387136, guid: ad68e0988db3f444da3f867fbe0ad018, type: 3}
   healthBar: {fileID: 114126106916056450}
 --- !u!1 &1773953987418726

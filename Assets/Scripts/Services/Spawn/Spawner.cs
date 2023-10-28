@@ -6,19 +6,26 @@ namespace Services.Spawn
 {
 	public class Spawner : MonoBehaviour
 	{
-		[Inject] private ISpawnService _spawnService;
 		[Inject] private SignalBus _signalBus;
+		[Inject] private ISpawnService _spawnService;
 		
 		private float _spawnRepeating;
 		private int _waveCount = 1;
-		private float _health;
+		private float _health ;
+		private float _startDelay = 5.0f;
 
 		private void Start()
 		{
 			_signalBus.Subscribe<GameEndSignal>(OnGameEnd);
+			_signalBus.Subscribe<GameRestartSignal>(OnGameRestart);
 			
+			InitiateSpawner();
+		}
+
+		private void InitiateSpawner()
+		{
 			_spawnRepeating = _spawnService.GetSpawnRepeating(_waveCount);
-			InvokeRepeating(nameof(Spawn), 5, _spawnRepeating);
+			InvokeRepeating(nameof(Spawn), _startDelay, _spawnRepeating);
 		}
 
 		private void Spawn()
@@ -27,9 +34,14 @@ namespace Services.Spawn
 			_spawnService.Spawn<Enemy>(_waveCount).IncreaseHealthRate(_health);
 		}
 		
-		private void OnGameEnd()
+		private void OnGameRestart() => InitiateSpawner();
+
+		private void OnGameEnd() => CancelInvoke();
+
+		private void OnDestroy()
 		{
-			CancelInvoke();
+			_signalBus.Unsubscribe<GameEndSignal>(OnGameEnd);
+			_signalBus.Unsubscribe<GameRestartSignal>(OnGameRestart);
 		}
 	}
 }

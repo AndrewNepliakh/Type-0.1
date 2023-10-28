@@ -21,7 +21,7 @@ public class CameraController : MonoBehaviour
 
     private void Start()
     {
-        target = _gameObjectsFactory.GetGameObject<PlayerController>().transform;
+        target = _gameObjectsFactory.GetSingleGameObject<PlayerController>().transform;
     }
 
     // void Update()

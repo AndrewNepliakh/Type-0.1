@@ -1,11 +1,13 @@
 ﻿using Infrastructure;
 using Player;
+using Services.Factory;
 using UnityEngine;
 using Zenject;
 
-public class TakingBattery : MonoBehaviour
+public class Battery : MonoBehaviour
 {
 	[Inject] private IStorageService _storageService;
+	[Inject] private IGameObjectsFactory _gameObjectsFactory;
 
 	[SerializeField] private GameObject _ernedRatePrefab;
 	[SerializeField] private GameObject _frustratePrefab;
@@ -16,25 +18,22 @@ public class TakingBattery : MonoBehaviour
 
 	private void Start()
 	{
-		Destroy(gameObject, _destroyCount);
-	}
-
-	private void OnDestroy()
-	{
-		Dissolve();
+		Invoke(nameof(Dissolve), _destroyCount);
 	}
 
 	private void Dissolve()
 	{
+		CancelInvoke();
 		if (!_player) 
-			Instantiate(_frustratePrefab, transform.position, Quaternion.identity);
+			_gameObjectsFactory.InstantiateNonSingleGameObject(_frustratePrefab, transform.position, Quaternion.identity);
+		_gameObjectsFactory.DestroyNonSingleGameObject(gameObject);
 	}
 
 	private void OnTriggerEnter(Collider other)
 	{
 		if (!other.TryGetComponent(out _player)) return;
-		Instantiate(_ernedRatePrefab, transform.position, Quaternion.identity);
+		_gameObjectsFactory.InstantiateNonSingleGameObject(_ernedRatePrefab, transform.position, Quaternion.identity);
 		_storageService.AddEnergy(_earning);
-		Destroy(gameObject);
+		_gameObjectsFactory.DestroyNonSingleGameObject(gameObject);
 	}
 }

@@ -33,7 +33,7 @@ public class TerminalController : MonoBehaviour, IFactorizable
     {
         children = GetComponentsInChildren<Renderer>();
         _animation = GetComponent<Animator>();
-        player = _gameObjectsFactory.GetGameObject<PlayerController>();
+        player = _gameObjectsFactory.GetSingleGameObject<PlayerController>();
         sheepClose = false;
         buildCanvas.SetActive(false);
 
@@ -113,7 +113,7 @@ public class TerminalController : MonoBehaviour, IFactorizable
 
     IEnumerator TurnOnUltGun()
     {
-        GameObject ultGun = _gameObjectsFactory.GetGameObject<UltimateGun>();
+        GameObject ultGun = _gameObjectsFactory.GetSingleGameObject<UltimateGun>();
         ultGun.GetComponent<Animator>().SetBool("UltGunBought", true);
         yield return new WaitForSeconds(2f);
         ultGun.GetComponent<UltimateGun>().enabled = true;

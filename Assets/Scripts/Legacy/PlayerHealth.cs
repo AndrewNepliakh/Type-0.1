@@ -1,4 +1,5 @@
 ﻿using Player;
+using Services.Factory;
 using Signals;
 using UnityEngine;
 using Zenject;
@@ -6,6 +7,7 @@ using Zenject;
 public class PlayerHealth : MonoBehaviour, IDamageable
 {
 	[Inject] private SignalBus _signalBus;
+	[Inject] private IGameObjectsFactory _gameObjectsFactory;
 	
 	public int healthPoint = 50;
 	public int currentHealth;
@@ -34,6 +36,6 @@ public class PlayerHealth : MonoBehaviour, IDamageable
 	{
 		_signalBus.Fire<GameEndSignal>();
 		Instantiate(deadSheep, transform.position, transform.rotation);
-		Destroy(gameObject);
+		_gameObjectsFactory.DestroySingleGameObject<PlayerController>();
 	}
 }

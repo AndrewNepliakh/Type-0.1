@@ -1,10 +1,13 @@
 ﻿using System;
+using Signals;
 using Zenject;
 
 namespace Infrastructure
 {
 	public class StorageService : IStorageService, IInitializable
 	{
+		[Inject] private SignalBus _signalBus;
+		
 		private int _energy;
 		private int _mines;
 
@@ -25,6 +28,8 @@ namespace Infrastructure
 		
 		public void Initialize()
 		{
+			_signalBus.Subscribe<GameRestartSignal>(GameRestart);
+			
 			_energy = Constants.START_ENERGY;
 			_mines = Constants.START_MINES;
 		}
@@ -53,6 +58,9 @@ namespace Infrastructure
 			OnMinesChanged?.Invoke(_mines);
 		}
 
-		
+		private void GameRestart()
+		{
+			_energy = Constants.START_ENERGY;
+		}
 	}
 }
