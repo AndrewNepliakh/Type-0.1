@@ -26,6 +26,7 @@ public class TerminalController : MonoBehaviour, IFactorizable
     private GameObject _player;
     private bool _sheepClose;
     private Material[] _rend;
+    private bool _isActivated;
 
 
     public void Start()
@@ -43,16 +44,17 @@ public class TerminalController : MonoBehaviour, IFactorizable
         _startColorWhite = _rend[0].color;
     }
 
-    private async void GameRestart()
+    private void GameRestart()
     {
         _player = _gameObjectsFactory.GetSingleGameObject<PlayerController>();
+        _isActivated = false;
     }
 
     private void Update()
     {
         _energyRequireBool = GameObject.FindGameObjectWithTag("CanvasRequire");
 
-        if (_player != null && buildCanvas != null)
+        if (_player != null && !_isActivated)
         {
             if (Vector3.Distance(transform.position, _player.transform.position) <= 2)
             {
@@ -70,7 +72,7 @@ public class TerminalController : MonoBehaviour, IFactorizable
 
     private void OnMouseOver()
     {
-        if (_sheepClose && buildCanvas != null)
+        if (_sheepClose && !_isActivated)
         {
             buildCanvas.SetActive(true);
             foreach (Renderer rnd in _children)
@@ -97,20 +99,21 @@ public class TerminalController : MonoBehaviour, IFactorizable
 
     private void OnMouseDown()
     {
-        if (_sheepClose && buildCanvas != null)
+        if (_sheepClose && !_isActivated)
         {
             if (_storageService.Energy >= _priseToByUltGun)
             {
                 _storageService.SubtractEnergy(_priseToByUltGun);
                 _rend[0].color = _startColorWhite;
                 _rend[1].color = _startColorDark;
-                Destroy(buildCanvas);
+                buildCanvas.SetActive(false);
                 _animation.SetBool("sheepClose", false);
                 StartCoroutine(TurnOnUltimateGun());
+                _isActivated = true;
             }
             else
             {
-                if (_energyRequireBool == null) Instantiate(energyRequire, transform.position, transform.rotation);
+                if (_energyRequireBool == null) _gameObjectsFactory.InstantiateNonSingleGameObject(energyRequire, transform.position, transform.rotation);
             }
         }
     }
