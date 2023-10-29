@@ -1,22 +1,24 @@
-﻿using Data;
-using Infrastructure;
-using Services;
+﻿using Services.InputService;
 using Services.Factory;
-using Services.UI;
+using Infrastructure;
 using UnityEngine;
+using Services.UI;
+using Services;
 using Zenject;
+using Data;
 
 public class TurretPlatform : MonoBehaviour
 {
-	[Inject] private IBuildService _buildService;
-	[Inject] private IStorageService _storageService;
 	[Inject] private IGameObjectsFactory _gameObjectsFactory;
+	[Inject] private IStorageService _storageService;
+	[Inject] private IBuildService _buildService;
+	[Inject] private IInputService _inputService;
 
 	[SerializeField] private PowerIsRequired300 _powerIsRequiredPrefab;
 	[SerializeField] private GameObject _buildCanvas;
-	[SerializeField] private GameObject _aura;
 	[SerializeField] private Color _hoverColorWhite;
 	[SerializeField] private Color _hoverColorDark;
+	[SerializeField] private GameObject _aura;
 	private Color _startColorWhite;
 	private Color _startColorDark;
 	private Material[] _rend;
@@ -32,6 +34,8 @@ public class TurretPlatform : MonoBehaviour
 
 	private void OnMouseEnter()
 	{
+		if(_inputService.IsOverUI()) return;
+		
 		_buildCanvas.SetActive(true);
 
 		_rend[0].color = _hoverColorWhite;
@@ -48,6 +52,8 @@ public class TurretPlatform : MonoBehaviour
 
 	private void OnMouseDown()
 	{
+		if(_inputService.IsOverUI()) return;
+		
 		var cost = _buildService.GetBuildItemCost(BuildType.Turret);
 
 		if (_storageService.Energy < cost && _energyRequireAlert == null)

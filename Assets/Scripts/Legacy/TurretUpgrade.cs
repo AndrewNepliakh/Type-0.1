@@ -1,17 +1,19 @@
-﻿using Data;
-using Infrastructure;
-using Services;
+﻿using UnityEngine.Serialization;
+using Services.InputService;
 using Services.Factory;
+using Infrastructure;
 using Services.UI;
 using UnityEngine;
-using UnityEngine.Serialization;
+using Services;
 using Zenject;
+using Data;
 
-public class Upgrade : MonoBehaviour
+public class TurretUpgrade : MonoBehaviour
 {
-	[Inject] private IBuildService _buildService;
-	[Inject] private IStorageService _storageService;
 	[Inject] private IGameObjectsFactory _gameObjectsFactory;
+	[Inject] private IStorageService _storageService;
+	[Inject] private IBuildService _buildService;
+	[Inject] private IInputService _inputService;
 
 	[SerializeField] private Color _hoverColorWhite;
 	[SerializeField] private Color _hoverColorDark;
@@ -62,6 +64,8 @@ public class Upgrade : MonoBehaviour
 
 	private void OnMouseEnter()
 	{
+		if(_inputService.IsOverUI()) return;
+		
 		_upgradeCanvas.SetActive(true);
 		_matsLafet[0].color = _hoverColorDark;
 		_matsAmmo[0].color = _hoverColorDark;
@@ -86,6 +90,8 @@ public class Upgrade : MonoBehaviour
 
 	private void OnMouseDown()
 	{
+		if(_inputService.IsOverUI()) return;
+		
 		var cost = _buildService.GetBuildItemCost(BuildType.PlasmaTurret);
 		
 		if (_storageService.Energy < cost && _energyRequireAlert == null)
