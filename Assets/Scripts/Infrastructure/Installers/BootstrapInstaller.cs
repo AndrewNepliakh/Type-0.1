@@ -1,7 +1,8 @@
-using Infrastructure;
-using Services;
+using Services.InputService;
 using Services.Factory;
 using Services.Spawn;
+using Infrastructure;
+using Services;
 using Signals;
 using Zenject;
 
@@ -13,6 +14,7 @@ public class BootstrapInstaller : MonoInstaller
         
         Container.DeclareSignal<GameEndSignal>();
         Container.DeclareSignal<GameRestartSignal>();
+        Container.DeclareSignal<LevelCompleteSignal>();
         Container.DeclareSignal<GameLateRestartSignal>();
         
         Container.Bind<IBuildService>().To<BuildService>().AsSingle().NonLazy();
@@ -20,6 +22,7 @@ public class BootstrapInstaller : MonoInstaller
         Container.Bind<IGameObjectsFactory>().To<GameObjectsFactory>().AsSingle().NonLazy();
         
         Container.Bind(typeof(IUIService),typeof(IInitializable)).To<UIService>().AsSingle().NonLazy();
+        Container.Bind(typeof(IInputService),typeof(IInitializable)).To<InputService>().AsSingle().NonLazy();
         Container.Bind(typeof(IStorageService),typeof(IInitializable)).To<StorageService>().AsSingle().NonLazy();
     }
 }

@@ -1,8 +1,8 @@
-using Player;
 using Services.Factory;
-using Signals;
 using UnityEngine;
+using Signals;
 using Zenject;
+using Player;
 
 public class GameSceneEnterPoint : MonoBehaviour
 {
@@ -26,14 +26,15 @@ public class GameSceneEnterPoint : MonoBehaviour
 	[SerializeField] private Vector3 _ultimateGunPosition;
 
 	[SerializeField] private GameObject _startBattery;
-	[SerializeField] private Vector3 __startBatteryPosition1;
-	[SerializeField] private Vector3 __startBatteryPosition2;
+	[SerializeField] private Vector3[] _startBatteryPositions;
 
-	private PlayerController _playerController;
+	[SerializeField] private GameObject _turretPlatform;
+	[SerializeField] private Vector3[] _turretPlatformPosition;
 
 	private void Awake()
 	{
 		_signalBus.Subscribe<GameEndSignal>(GameEnd);
+		_signalBus.Subscribe<LevelCompleteSignal>(LevelCompleteWin);
 		_signalBus.Subscribe<GameRestartSignal>(GameRestart);
 
 		InitializeScene();
@@ -51,10 +52,8 @@ public class GameSceneEnterPoint : MonoBehaviour
 
 	private void InitializeScene()
 	{
-		_playerController = _gameObjectsFactory
-			.InstantiateSingleGameObject<PlayerController>(_player, _playerPosition, _player.transform.rotation)
-			.GetComponent<PlayerController>();
-
+		_gameObjectsFactory
+			.InstantiateSingleGameObject<PlayerController>(_player, _playerPosition, _player.transform.rotation);
 		_gameObjectsFactory.InstantiateSingleGameObject<OwnResp>(_ownResp, _ownRespPosition,
 			_ownResp.transform.rotation);
 		_gameObjectsFactory.InstantiateSingleGameObject<EnemyResp>(_enemyResp, _enemyRespPosition,
@@ -64,10 +63,22 @@ public class GameSceneEnterPoint : MonoBehaviour
 		_gameObjectsFactory.InstantiateSingleGameObject<UltimateGun>(_ultimateGun, _ultimateGunPosition,
 			_ultimateGun.transform.rotation);
 
-		_gameObjectsFactory.InstantiateNonSingleGameObject(_startBattery, __startBatteryPosition1,
-			_startBattery.transform.rotation);
-		_gameObjectsFactory.InstantiateNonSingleGameObject(_startBattery, __startBatteryPosition2,
-			_startBattery.transform.rotation);
+		foreach (var position in _startBatteryPositions)
+		{
+			_gameObjectsFactory.InstantiateNonSingleGameObject(_startBattery, position,
+				_startBattery.transform.rotation);
+		}
+		
+		foreach (var position in _turretPlatformPosition)
+		{
+			_gameObjectsFactory.InstantiateNonSingleGameObject(_turretPlatform, position,
+				_turretPlatform.transform.rotation);
+		}
+	}
+	
+	private void LevelCompleteWin()
+	{
+		_uiService.ShowWindow<GameUIWindow>().ShowLevelComplete();
 	}
 
 	private void GameEnd()
@@ -78,24 +89,15 @@ public class GameSceneEnterPoint : MonoBehaviour
 	private void GameRestart()
 	{
 		_gameObjectsFactory.DestroyAllNonSingleObjects();
-		
-		if (_playerController)
-			_playerController.transform.position = _playerPosition;
-		else
-			_playerController = _gameObjectsFactory
-				.InstantiateSingleGameObject<PlayerController>(_player, _playerPosition, _player.transform.rotation)
-				.GetComponent<PlayerController>();
-		
+		_gameObjectsFactory.DestroySingleGameObject<PlayerController>();
 		_gameObjectsFactory.DestroySingleGameObject<UltimateGun>();
-		_gameObjectsFactory.InstantiateSingleGameObject<UltimateGun>(_ultimateGun, _ultimateGunPosition,
-			_ultimateGun.transform.rotation);
-		
 		_signalBus.Fire<GameLateRestartSignal>();
 	}
 
 	private void OnDestroy()
 	{
 		_signalBus.Unsubscribe<GameEndSignal>(GameEnd);
+		_signalBus.Unsubscribe<LevelCompleteSignal>(LevelCompleteWin);
 		_signalBus.Unsubscribe<GameRestartSignal>(GameRestart);
 	}
 }

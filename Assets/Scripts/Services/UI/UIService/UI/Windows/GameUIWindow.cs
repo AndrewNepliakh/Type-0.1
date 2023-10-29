@@ -1,7 +1,7 @@
 ﻿using Infrastructure;
-using TMPro;
 using UnityEngine;
 using Zenject;
+using TMPro;
 
 public class GameUIWindow : Window
 {
@@ -10,6 +10,8 @@ public class GameUIWindow : Window
 	[SerializeField] private TMP_Text _energyText;
 	[SerializeField] private TMP_Text _minesText;
 	[SerializeField] private GameObject _gameEndScreen;
+	[SerializeField] private GameObject _levelWinScreen;
+	[SerializeField] private GameObject _pauseScreen;
 
 	public override void Show(UIViewArguments arguments)
 	{
@@ -21,6 +23,16 @@ public class GameUIWindow : Window
 		Reset();
 	}
 	
+	public void ShowLevelComplete()
+	{
+		_levelWinScreen.SetActive(true);
+	}
+	
+	public void CloseLevelComplete()
+	{
+		_levelWinScreen.SetActive(false);
+	}
+	
 	public void ShowEndGame()
 	{
 		_gameEndScreen.SetActive(true);
@@ -29,6 +41,16 @@ public class GameUIWindow : Window
 	public void CloseEndGame()
 	{
 		_gameEndScreen.SetActive(false);
+	}
+	
+	public void ShowPauseMenu()
+	{
+		_pauseScreen.SetActive(true);
+	}
+	
+	public void ClosePauseMenu()
+	{
+		_pauseScreen.SetActive(false);
 	}
 
 	public override void Hide(UIViewArguments arguments)
@@ -41,6 +63,8 @@ public class GameUIWindow : Window
 
 	public override void Reset()
 	{
+		CloseLevelComplete();
+		ClosePauseMenu();
 		CloseEndGame();
 		UpdateView();
 	}

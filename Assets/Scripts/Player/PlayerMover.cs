@@ -1,17 +1,22 @@
-﻿using UnityEngine;
+﻿using Services.InputService;
+using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.Serialization;
+using Zenject;
 
 namespace Player
 {
 	[RequireComponent(typeof(NavMeshAgent))]
 	public class PlayerMover : MonoBehaviour
 	{
+		[Inject] private IInputService _inputService;
+		
 		[SerializeField] private NavMeshAgent agent;
 		private bool _isOtherHit;
 
 		void Update()
 		{
+			if(_inputService.IsOverUI())return;
+			
 			if (Input.GetMouseButtonUp(0))
 			{
 				if (!_isOtherHit)

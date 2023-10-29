@@ -1,41 +1,60 @@
 ﻿using Services.Factory;
-using UnityEngine;
 using UnityEngine.UI;
+using Infrastructure;
+using UnityEngine;
+using Signals;
+using Zenject;
 
 public class EnemyResp : MonoBehaviour, IFactorizable
 {
-	public float force = 700f;
-	public float healthPoint = 100;
-	private float currentHealth;
-	bool hasExploded = false;
+	[Inject] private SignalBus _signalBus;
+	[Inject] private IGameObjectsFactory _gameObjectsFactory;
+
 	public GameObject explosionFX;
 	public GameObject brokenResp;
 	public Image healthBar;
 
+	private float _currentHealth;
+	private bool _hasExploded;
+	private int _healthPoint;
+
 	public void Start()
 	{
-		currentHealth = healthPoint;
+		RestartGame();
+		_signalBus.Subscribe<GameLateRestartSignal>(RestartGame);
 	}
 
-	private void Update()
+	private void RestartGame()
 	{
-		healthBar.fillAmount = healthPoint / currentHealth;
+		_healthPoint = Constants.START_HP_ENEMY_RESP;
+		_currentHealth = _healthPoint;
+		healthBar.fillAmount = _healthPoint / _currentHealth;
 	}
+
 
 	public void TakeDamage(int amount)
 	{
-		healthPoint -= amount;
-		if (healthPoint <= 0 && !hasExploded)
+		_healthPoint -= amount;
+		healthBar.fillAmount = _healthPoint / _currentHealth;
+		if (_healthPoint <= 0 && !_hasExploded)
 		{
-			hasExploded = true;
+			_hasExploded = true;
 			Termination();
 		}
 	}
 
 	void Termination()
 	{
-		Destroy(Instantiate(explosionFX, transform.position, transform.rotation), 2);
-		Destroy(Instantiate(brokenResp, transform.position, transform.rotation), 2);
-		Destroy(gameObject);
+		_gameObjectsFactory.DestroyNonSingleGameObject(
+			_gameObjectsFactory.InstantiateNonSingleGameObject(explosionFX, transform.position, transform.rotation), 2);
+		_gameObjectsFactory.DestroyNonSingleGameObject(
+			_gameObjectsFactory.InstantiateNonSingleGameObject(brokenResp, transform.position, transform.rotation), 2);
+		_gameObjectsFactory.DestroySingleGameObject<EnemyResp>();
+		_signalBus.Fire<LevelCompleteSignal>();
+	}
+
+	private void OnDestroy()
+	{
+		_signalBus.Unsubscribe<GameLateRestartSignal>(RestartGame);
 	}
 }
